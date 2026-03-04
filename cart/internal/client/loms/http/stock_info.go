@@ -1,0 +1,56 @@
+package clienthttp
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	uc "github.com/vaa/hw/cart/internal/usecase"
+)
+
+type (
+	stockInfoRequestPayload struct {
+		sku uint32
+	}
+
+	stockInfoResponsePayload struct {
+		Count uint16 `json:"count"`
+	}
+)
+
+func (s *LomsHttpClient) StockInfo(sku uint32) (*uc.StockInfoDTO, error) {
+
+	path := "/stock/info"
+
+	body := stockInfoRequestPayload{
+		sku: sku,
+	}
+
+	var err error
+
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("Error marshalling JSON: %v", err)
+	}
+
+	resp, err := http.Post(s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
+
+	if err != nil {
+		return nil, fmt.Errorf("Error POST request execution: %v", err)
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("POST request failed with status: %s", resp.Status)
+	}
+
+	var respData stockInfoResponsePayload
+	err = json.NewDecoder(resp.Body).Decode(&respData)
+	if err != nil {
+		return nil, fmt.Errorf("Error decoding JSON response: %v", err)
+	}
+
+	return &uc.StockInfoDTO{Sku: sku, Count: respData.Count}, nil
+}
