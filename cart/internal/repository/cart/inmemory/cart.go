@@ -4,7 +4,7 @@ import (
 	uc "github.com/vaa/hw/cart/internal/usecase"
 )
 
-func (r *CartRepoInmemory) List(ownerId uint64) ([]*uc.CartItemDTO, error) {
+func (r *CartRepoInmemory) Cart(ownerId uint64) (*uc.CartDTO, error) {
 
 	cart := r.cart(ownerId)
 
@@ -16,5 +16,5 @@ func (r *CartRepoInmemory) List(ownerId uint64) ([]*uc.CartItemDTO, error) {
 		})
 	}
 
-	return list, nil
+	return &uc.CartDTO{User: ownerId, Items: list}, nil
 }

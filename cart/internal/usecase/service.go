@@ -2,8 +2,6 @@ package usecase
 
 import (
 	"errors"
-
-	"github.com/vaa/hw/cart/internal/entity"
 )
 
 var ErrInsufficientStock = errors.New("Insufficient stock")
@@ -12,16 +10,17 @@ type (
 	ICartRepo interface {
 		AddItem(ownerId uint64, itemId uint32, count uint16) error
 		DeleteItem(ownerId uint64, itemId uint32) error
-		List(ownerId uint64) ([]*CartItemDTO, error)
+		Cart(ownerId uint64) (*CartDTO, error)
 		Clear(ownerId uint64) error
 	}
 
 	ILomsClient interface {
 		StockInfo(Sku uint32) (*StockInfoDTO, error)
+		OrderCreate(user uint64, cartContent *OrderContentDTO) (*OrderDto, error)
 	}
 
 	IProductServiceClient interface {
-		ProductInfo(Sku uint32) (*ProductInfoDTO, error)
+		Product(Sku uint32) (*ProductDTO, error)
 	}
 
 	CartService struct {
@@ -40,13 +39,5 @@ func NewCartService(
 		repo:  repo,
 		loms:  lomsClient,
 		prods: productServiceClient,
-	}
-}
-
-func ProductInfoDtoToTradeItemEntity(dto *ProductInfoDTO) *entity.TradeItem {
-	return &entity.TradeItem{
-		Sku:   dto.Sku,
-		Name:  dto.Name,
-		Price: dto.Price,
 	}
 }

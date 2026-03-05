@@ -1,7 +1,5 @@
 package usecase
 
-import "github.com/vaa/hw/cart/internal/entity"
-
 type (
 	UserId = uint64
 	SKU    = uint32
@@ -11,7 +9,12 @@ type (
 		Count uint16
 	}
 
-	ProductInfoDTO struct {
+	CartDTO struct {
+		User  uint64
+		Items []*CartItemDTO
+	}
+
+	ProductDTO struct {
 		Sku   uint32
 		Name  string
 		Price uint64
@@ -23,18 +26,26 @@ type (
 	}
 
 	ProductItemDTO struct {
-		TradeItem *entity.TradeItem
-		Count     uint16
+		Sku   uint32
+		Name  string
+		Price uint64
+		Count uint16
+	}
+
+	CartListDTO struct {
+		Items []*ProductItemDTO
 	}
 
 	OrderDto struct {
 		OrderId uint64
 	}
 
+	OrderContentItemDTO struct {
+		Sku   uint32
+		Count uint16
+	}
+
 	OrderContentDTO struct {
-		Items []struct {
-			Sku   uint32
-			Count uint16
-		}
+		Items []*OrderContentItemDTO
 	}
 )

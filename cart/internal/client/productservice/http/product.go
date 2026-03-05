@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	uc "github.com/vaa/hw/cart/internal/usecase"
+	"github.com/vaa/hw/cart/internal/usecase"
 )
 
 type (
@@ -25,7 +25,7 @@ type (
 	}
 )
 
-func (s *ProductServiceHttpClient) ProductInfo(sku uint32) (*uc.ProductInfoDTO, error) {
+func (s *ProductServiceHttpClient) Product(sku uint32) (*usecase.ProductDTO, error) {
 	path := "/get_product"
 
 	body := requestPayload{
@@ -58,5 +58,5 @@ func (s *ProductServiceHttpClient) ProductInfo(sku uint32) (*uc.ProductInfoDTO, 
 		return nil, fmt.Errorf("Error decoding JSON response: %v", err)
 	}
 
-	return &uc.ProductInfoDTO{Sku: sku, Name: respData.Name, Price: uint64(respData.Price)}, nil
+	return &usecase.ProductDTO{Sku: sku, Name: respData.Name, Price: uint64(respData.Price)}, nil
 }

@@ -34,29 +34,27 @@ func (c *CartHttpController) CartList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	productItemList, err := c.cartService.ProductItemList(reqBody.User)
+	cart, err := c.cartService.FindCart(reqBody.User)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	var totalPrice uint64 = 0
 	responseItems := make([]*cartListResponseItem, 1)
 
-	for _, prodItem := range productItemList {
-		totalItemPrice := prodItem.TradeItem.Price * uint64(prodItem.Count)
-		totalPrice += totalItemPrice
+	for _, cartItem := range cart.Items {
+
 		responseItems = append(responseItems, &cartListResponseItem{
-			Sku:   prodItem.TradeItem.Sku,
-			Name:  prodItem.TradeItem.Name,
-			Price: prodItem.TradeItem.Price,
-			Count: prodItem.Count,
+			Sku:   cartItem.Product.Sku,
+			Name:  cartItem.Product.Name,
+			Price: cartItem.Product.Price,
+			Count: cartItem.Count,
 		})
 	}
 
 	respBody := cartListResponseBody{
 		Items:      responseItems,
-		TotalPrice: totalPrice,
+		TotalPrice: cart.TotalPrice(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

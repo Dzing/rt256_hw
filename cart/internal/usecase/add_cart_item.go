@@ -5,15 +5,15 @@ import "fmt"
 func (s *CartService) AddCartItem(userId uint64, sku uint32, count uint16) error {
 
 	var err error
-	prodInfo, err := s.prods.ProductInfo(sku)
+	productDto, err := s.prods.Product(sku)
 
 	if err != nil {
 		return err
 	}
 
-	tradeItem := ProductInfoDtoToTradeItemEntity(prodInfo)
+	product := ProductToEntity(productDto)
 
-	err = tradeItem.Validate()
+	err = product.Validate()
 	if err != nil {
 		return fmt.Errorf("Invalid item: sku=%d", sku)
 	}

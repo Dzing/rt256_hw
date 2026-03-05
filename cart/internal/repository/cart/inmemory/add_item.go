@@ -17,5 +17,6 @@ func (r *CartRepoInmemory) AddItem(ownerId uint64, itemId uint32, count uint16) 
 		}
 		cart.items[itemId_] = itemData
 	}
+	itemData.count += count
 	return nil
 }
