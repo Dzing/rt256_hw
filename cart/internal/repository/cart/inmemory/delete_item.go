@@ -5,9 +5,9 @@ func (r *CartRepoInmemory) DeleteItem(ownerId uint64, itemId uint32) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	itemId_ := itemId_t(itemId)
+	itemId_ := TSku(itemId)
 
-	cart := r.cart(ownerId)
+	cart := r.fetchCart(ownerId)
 	delete(cart.items, itemId_)
 
 	return nil

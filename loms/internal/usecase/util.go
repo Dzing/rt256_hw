@@ -1,4 +1,4 @@
-package usecases
+package usecase
 
 var orderNoIterator int64
 

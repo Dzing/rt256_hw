@@ -1,5 +1,5 @@
 http:
-  addr: ":10050"
+  addr: "localhost:10050"
 loms:
   addr: ":10051"
 prod:

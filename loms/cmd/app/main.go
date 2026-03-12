@@ -1,28 +1,38 @@
 package main
 
 import (
-	"context"
+	"flag"
 	"fmt"
-	"io"
+	"log"
+	"net/http"
 	"os"
+
+	"atlas.chr/vaa/route-hw/loms/config"
 )
 
-// с хуками для тестов
 func run(
-	ctx context.Context,
-	args []string,
-	stdin io.Reader,
-	stdout io.Writer,
-	stderr io.Writer,
-	getenv func(string) string,
-
+	cfg *config.Config,
 ) error {
 
-	// инициализировать репозитории
+	// репозитории
+	// клиенты
+	// бизнес-логика
+	// контроллеры
+	// http сервер
 
-	// инициализировать основной сервис (бизнес-логика)
+	mux := http.NewServeMux()
+	// TODO:
+	//httpCtrl.SetupRoutes(mux)
 
-	// инициализировать контроллер
+	addr := fmt.Sprintf(":%s", cfg.Http.Addr)
+
+	fmt.Printf("Server is running on %s\n", addr)
+	fmt.Println()
+
+	if err := http.ListenAndServe(addr, mux); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+		return err
+	}
 
 	return nil
 
@@ -30,13 +40,22 @@ func run(
 
 func main() {
 
+	configPath := flag.String("cfgpath", "", "path to config file in yaml format")
+	flag.Parse()
+
+	path_ := *configPath
+	if path_ == "" {
+		path_ = os.Getenv("CART_CONF")
+	}
+
+	cfg, err := config.NewConfig(path_)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
+
 	if err := run(
-		context.Background(),
-		os.Args,
-		os.Stdin,
-		os.Stdout,
-		os.Stderr,
-		os.Getenv,
+		cfg,
 	); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)

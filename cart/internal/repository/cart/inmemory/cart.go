@@ -6,7 +6,7 @@ import (
 
 func (r *CartRepoInmemory) Cart(ownerId uint64) (*uc.CartDTO, error) {
 
-	cart := r.cart(ownerId)
+	cart := r.fetchCart(ownerId)
 
 	list := make([]*uc.CartItemDTO, len(cart.items))
 	for itemId, itemData := range cart.items {

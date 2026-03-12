@@ -1,36 +1,42 @@
 package inmemory
 
-import "sync"
+import (
+	"sync"
 
-type ownerId_t = uint64
-type itemId_t = uint64
+	"github.com/vaa/hw/cart/internal/usecase"
+)
 
-type cartItemData struct {
-	itemId itemId_t
-	count  uint16
-}
+type (
+	TUserId = uint64
+	TSku    = uint64
 
-type cartData struct {
-	ownerId ownerId_t
-	items   map[itemId_t]*cartItemData
-}
+	cartItemData struct {
+		sku   TSku
+		count uint16
+	}
 
-type CartRepoInmemory struct {
-	carts map[ownerId_t]*cartData
-	mu    sync.RWMutex
-}
+	cartData struct {
+		ownerId TUserId
+		items   map[TSku]*cartItemData
+	}
 
-func (r *CartRepoInmemory) cart(ownerId ownerId_t) *cartData {
+	CartRepoInmemory struct {
+		carts map[TUserId]*cartData
+		mu    sync.RWMutex
+	}
+)
+
+func (r *CartRepoInmemory) fetchCart(userId TUserId) *cartData {
 	// если записи нет - создаст
 
-	fetchCart, ok := r.carts[ownerId]
+	fetchCart, ok := r.carts[userId]
 
 	if !ok {
 		fetchCart = &cartData{
-			ownerId: ownerId,
-			items:   make(map[itemId_t]*cartItemData),
+			ownerId: userId,
+			items:   make(map[TSku]*cartItemData),
 		}
-		r.carts[ownerId] = fetchCart
+		r.carts[userId] = fetchCart
 	}
 
 	return fetchCart
@@ -39,6 +45,9 @@ func (r *CartRepoInmemory) cart(ownerId ownerId_t) *cartData {
 
 func NewCartRepoInmemory() *CartRepoInmemory {
 	return &CartRepoInmemory{
-		carts: make(map[ownerId_t]*cartData),
+		carts: make(map[TUserId]*cartData),
 	}
 }
+
+// проверка соответствия интерфейсу
+var _ usecase.ICartRepo = (*CartRepoInmemory)(nil)

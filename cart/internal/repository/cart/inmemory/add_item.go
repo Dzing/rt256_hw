@@ -4,16 +4,16 @@ func (r *CartRepoInmemory) AddItem(ownerId uint64, itemId uint32, count uint16) 
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	itemId_ := itemId_t(itemId)
+	itemId_ := TSku(itemId)
 
-	cart := r.cart(ownerId)
+	cart := r.fetchCart(ownerId)
 
 	itemData, ok := cart.items[itemId_]
 
 	if !ok {
 		itemData = &cartItemData{
-			itemId: itemId_,
-			count:  0,
+			sku:   itemId_,
+			count: 0,
 		}
 		cart.items[itemId_] = itemData
 	}

@@ -5,7 +5,7 @@ func (r *CartRepoInmemory) Clear(ownerId uint64) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	cart := r.cart(ownerId)
+	cart := r.fetchCart(ownerId)
 	clear(cart.items)
 
 	return nil
