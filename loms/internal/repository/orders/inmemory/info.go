@@ -19,10 +19,10 @@ func (this *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoD
 		return nil, fmt.Errorf("Order Not found id=%v", data)
 	}
 
-	itemsDTO := make([]usecase.SkuCountRecord, 1)
+	itemsDTO := make([]*usecase.SkuCountRecord, 1)
 
 	for _, item := range order.Items {
-		itemsDTO = append(itemsDTO, usecase.SkuCountRecord{
+		itemsDTO = append(itemsDTO, &usecase.SkuCountRecord{
 			Sku:   usecase.TSku(item.Sku),
 			Count: usecase.TCount(item.Count),
 		})
@@ -30,6 +30,7 @@ func (this *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoD
 
 	return &usecase.OrderInfoDTO{
 		OrderId:    usecase.TOrderId(order.OrderId),
+		UserId:     usecase.TUserId(order.UserId),
 		OrderState: orderStateToUsecaseFormat(order.OrderState),
 		Items:      itemsDTO,
 	}, nil

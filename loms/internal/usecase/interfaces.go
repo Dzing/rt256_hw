@@ -8,9 +8,9 @@ type (
 	}
 
 	IStockRepository interface {
-		StockAdd(stockAddData *StockAddDTO) error
-		ReserveCreate(reserveData *StockReserveDTO) error
-		ReserveRemove(orderId TOrderId) error
-		ReserveCancel(orderId TOrderId) error
+		StockAdd(stockAddData *ItemCountListDTO) error
+		ReserveCreate(reserveData *ItemCountListDTO) error
+		ReserveRemove(reserveData *ItemCountListDTO) error
+		ReserveCancel(reserveData *ItemCountListDTO) error
 	}
 )

@@ -3,7 +3,7 @@ package inmemory
 import "atlas.chr/vaa/route-hw/loms/internal/usecase"
 
 // Add implements [usecase.IStockRepository].
-func (this *StockRepoInmemory) StockAdd(stockAddData *usecase.StockAddDTO) error {
+func (this *StockRepoInmemory) StockAdd(stockAddData *usecase.ItemCountListDTO) error {
 	this.mu.Lock()
 	defer this.mu.Unlock()
 
@@ -22,7 +22,7 @@ func (this *StockRepoInmemory) fetchStockRecord(sku TSku) *StockItemRecord {
 		stockRecord = &StockItemRecord{
 			Sku:     sku,
 			Count:   0,
-			Reserve: &StockReserve{},
+			Reserve: 0,
 		}
 		this.stock[sku] = stockRecord
 	}

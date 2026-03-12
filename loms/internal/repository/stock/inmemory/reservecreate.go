@@ -7,7 +7,7 @@ import (
 )
 
 // ReserveCreate implements [usecase.IStockRepository].
-func (this *StockRepoInmemory) ReserveCreate(reserveData *usecase.StockReserveDTO) error {
+func (this *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO) error {
 	this.mu.Lock()
 	defer this.mu.Unlock()
 
@@ -21,12 +21,8 @@ func (this *StockRepoInmemory) ReserveCreate(reserveData *usecase.StockReserveDT
 
 	// создать записи
 	for _, reserveDataItem := range reserveData.Items {
-		reserve := this.stock[TSku(reserveDataItem.Sku)].Reserve
-		reserve.Reserve = append(reserve.Reserve, &StockReserveRecord{
-			OrderId: TOrderId(reserveData.OrderId),
-			Count:   TCount(reserveDataItem.Count),
-		})
-		reserve.TotalCount += TCount(reserveDataItem.Count)
+		skuStock, _ := this.stock[TSku(reserveDataItem.Sku)]
+		skuStock.Reserve += TCount(reserveDataItem.Count)
 	}
 
 	return nil

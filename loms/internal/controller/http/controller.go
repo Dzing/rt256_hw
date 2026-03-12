@@ -1,29 +1,25 @@
-package http
+package httpcontroller
 
 import (
-	"encoding/json"
-	"net/http"
+	"atlas.chr/vaa/route-hw/loms/internal/entity"
+	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
-type Controller struct {
-}
+type (
+	ILomsService interface {
+		CreateOrder(user usecase.TUserId, items *usecase.ItemCountListDTO) (*entity.Order, error)
+	}
+	LomsHttpController struct {
+		lomsService ILomsService
+	}
+)
 
 /**/
 
-func NewHttpController() *Controller {
-	return &Controller{}
+func NewHttpController(srvc ILomsService) *LomsHttpController {
+	return &LomsHttpController{
+		lomsService: srvc,
+	}
 }
 
 /**/
-
-func (c *Controller) SetRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/order/create", c.CreateOrder)
-}
-
-/**/
-func (c *Controller) CreateOrder(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusCreated)
-
-	json.NewEncoder(w).Encode("TODO:")
-
-}

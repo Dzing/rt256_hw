@@ -2,14 +2,16 @@ package usecase
 
 type (
 	LOMSService struct {
-		repo IOrdersRepository
+		orderRepo IOrdersRepository
+		stockRepo IStockRepository
 	}
 )
 
 /**/
 
-func NewOrdersService(r IOrdersRepository) *LOMSService {
+func NewOrdersService(orderRepo IOrdersRepository, stockRepo IStockRepository) *LOMSService {
 	return &LOMSService{
-		repo: r,
+		orderRepo: orderRepo,
+		stockRepo: stockRepo,
 	}
 }

@@ -8,16 +8,6 @@ type (
 	StockItemRecord struct {
 		Sku     TSku
 		Count   TCount
-		Reserve *StockReserve
-	}
-
-	StockReserveRecord struct {
-		Count   TCount
-		OrderId TOrderId
-	}
-
-	StockReserve struct {
-		Reserve    []*StockReserveRecord
-		TotalCount TCount
+		Reserve TCount
 	}
 )

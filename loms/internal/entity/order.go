@@ -11,14 +11,15 @@ type (
 
 	EOrderState int
 
+	OrderItemRecord struct {
+		Sku   TSku
+		Count TCount
+	}
 	Order struct {
 		Id     TOrderId
 		UserId TUserId
 		State  EOrderState
-		Items  []struct {
-			Sku   TSku
-			Count TCount
-		}
+		Items  []*OrderItemRecord
 	}
 )
 

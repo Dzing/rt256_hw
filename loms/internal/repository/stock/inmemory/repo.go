@@ -20,15 +20,12 @@ func NewStockRepoInmemory() *StockRepoInmemory {
 }
 
 func (this *StockRepoInmemory) remains(sku TSku) int64 {
-	var stockCount TCount = 0
-	var reserveCount TCount = 0
+
 	stock, ok := this.stock[sku]
 	if ok {
-		stockCount = stock.Count
-		reserveCount = stock.Reserve.TotalCount
+		return int64(stock.Count - stock.Reserve)
 	}
-
-	return int64(stockCount - reserveCount)
+	return 0
 
 }
 
