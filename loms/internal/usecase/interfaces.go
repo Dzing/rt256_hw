@@ -9,6 +9,7 @@ type (
 
 	IStockRepository interface {
 		StockAdd(stockAddData *ItemCountListDTO) error
+		StockInfo(sku TSku) (*StockInfoDTO, error)
 		ReserveCreate(reserveData *ItemCountListDTO) error
 		ReserveRemove(reserveData *ItemCountListDTO) error
 		ReserveCancel(reserveData *ItemCountListDTO) error

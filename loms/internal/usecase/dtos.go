@@ -21,4 +21,10 @@ type (
 	ItemCountListDTO struct {
 		Items []*SkuCountRecord
 	}
+
+	StockInfoDTO struct {
+		Count     TCount
+		Reserved  TCount
+		Available TCount
+	}
 )

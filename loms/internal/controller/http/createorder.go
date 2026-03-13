@@ -55,6 +55,7 @@ func (this *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	respBody := createOrderResponseBody{
@@ -64,6 +65,7 @@ func (this *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Reque
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(respBody); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
