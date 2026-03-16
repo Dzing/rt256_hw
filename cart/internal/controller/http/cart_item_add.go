@@ -21,15 +21,12 @@ func (c *CartHttpController) CartItemAdd(w http.ResponseWriter, r *http.Request)
 
 	var reqBody cartAddItemRequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = c.cartService.AddCartItem(reqBody.User, reqBody.Sku, reqBody.Count)
-
-	if err != nil {
+	if err := c.cartService.AddCartItem(reqBody.User, reqBody.Sku, reqBody.Count); err != nil {
 		if errors.Is(err, usecase.ErrInsufficientStock) {
 			w.WriteHeader(http.StatusPreconditionFailed)
 			return

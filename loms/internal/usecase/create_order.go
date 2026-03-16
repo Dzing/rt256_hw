@@ -15,8 +15,7 @@ func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entit
 		return nil, err
 	}
 
-	err = s.stockRepo.ReserveCreate(items)
-	if err != nil {
+	if err := s.stockRepo.ReserveCreate(items); err != nil {
 		s.orderRepo.SetState(orderId, OrderStateFailed)
 		return nil, ErrInsufficientStock
 	}

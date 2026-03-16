@@ -12,7 +12,6 @@ func (r *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState useca
 	defer r.mu.Unlock()
 
 	_orderState, err := OrderStateToRepoType(orderState)
-
 	if err != nil {
 		return err
 	}

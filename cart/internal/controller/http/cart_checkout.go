@@ -16,8 +16,7 @@ func (c *CartHttpController) CartCheckout(w http.ResponseWriter, r *http.Request
 
 	var reqBody cartCheckoutRequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

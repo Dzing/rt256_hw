@@ -17,15 +17,12 @@ func (c *CartHttpController) CartItemDelete(w http.ResponseWriter, r *http.Reque
 
 	var reqBody сartItemDeleteRequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = c.cartService.DeleteCartItem(reqBody.User, reqBody.Sku)
-
-	if err != nil {
+	if err := c.cartService.DeleteCartItem(reqBody.User, reqBody.Sku); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

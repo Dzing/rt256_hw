@@ -26,8 +26,7 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 
 	var reqBody createOrderRequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

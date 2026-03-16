@@ -6,13 +6,11 @@ func (s *LOMSService) PayOrder(orderId TOrderId) error {
 		return err
 	}
 
-	err = s.stockRepo.ReserveRemove(&ItemCountListDTO{Items: orderInfo.Items})
-	if err != nil {
+	if err := s.stockRepo.ReserveRemove(&ItemCountListDTO{Items: orderInfo.Items}); err != nil {
 		return err
 	}
 
-	err = s.orderRepo.SetState(orderId, OrderStatePayed)
-	if err != nil {
+	if err = s.orderRepo.SetState(orderId, OrderStatePayed); err != nil {
 		return err
 	}
 

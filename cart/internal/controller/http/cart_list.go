@@ -27,8 +27,7 @@ func (c *CartHttpController) CartList(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var reqBody cartListRequestBody
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

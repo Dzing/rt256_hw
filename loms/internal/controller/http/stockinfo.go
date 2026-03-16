@@ -22,14 +22,12 @@ func (c *LomsHttpController) StockInfo(w http.ResponseWriter, r *http.Request) {
 
 	var reqBody stockInfoRequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	info, err := c.lomsService.StockInfo(usecase.TSku(reqBody.Sku))
-
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

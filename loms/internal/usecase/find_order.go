@@ -8,7 +8,6 @@ import (
 
 func (s *LOMSService) FindOrder(orderId TOrderId) (*entity.Order, error) {
 	orderInfo, err := s.orderRepo.Info(orderId)
-
 	if err != nil {
 		return nil, err
 	}

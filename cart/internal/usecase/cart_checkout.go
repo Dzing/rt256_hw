@@ -4,10 +4,10 @@ import "github.com/vaa/hw/cart/internal/entity"
 
 func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 	cart, err := s.repo.Cart(userId)
-
 	if err != nil {
 		return nil, err
 	}
+
 	var orderContent OrderContentDTO
 
 	items := make([]*OrderContentItemDTO, 1)
@@ -17,7 +17,6 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 	orderContent.Items = items
 
 	orderCreated, err := s.loms.OrderCreate(userId, &orderContent)
-
 	if err != nil {
 		return nil, err
 	}

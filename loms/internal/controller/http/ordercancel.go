@@ -18,15 +18,12 @@ func (c *LomsHttpController) OrderCancel(w http.ResponseWriter, r *http.Request)
 
 	var reqBody orderCancelRequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = c.lomsService.CancelOrder(usecase.TOrderId(reqBody.OrderId))
-
-	if err != nil {
+	if err := c.lomsService.CancelOrder(usecase.TOrderId(reqBody.OrderId)); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

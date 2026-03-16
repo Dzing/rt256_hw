@@ -6,13 +6,11 @@ func (s *LOMSService) CancelOrder(orderId TOrderId) error {
 		return err
 	}
 
-	err = s.stockRepo.ReserveCancel(&ItemCountListDTO{Items: orderInfo.Items})
-	if err != nil {
+	if err := s.stockRepo.ReserveCancel(&ItemCountListDTO{Items: orderInfo.Items}); err != nil {
 		return err
 	}
 
-	err = s.orderRepo.SetState(orderId, OrderStateCancelled)
-	if err != nil {
+	if err := s.orderRepo.SetState(orderId, OrderStateCancelled); err != nil {
 		return err
 	}
 

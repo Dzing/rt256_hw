@@ -39,7 +39,6 @@ func (s *ProductServiceHttpClient) Product(sku uint32) (*usecase.ProductDTO, err
 	}
 
 	resp, err := http.Post(s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
-
 	if err != nil {
 		return nil, fmt.Errorf("Error POST request execution: %v", err)
 	}
@@ -51,8 +50,7 @@ func (s *ProductServiceHttpClient) Product(sku uint32) (*usecase.ProductDTO, err
 	}
 
 	var respData responsePayload
-	err = json.NewDecoder(resp.Body).Decode(&respData)
-	if err != nil {
+	if err = json.NewDecoder(resp.Body).Decode(&respData); err != nil {
 		return nil, fmt.Errorf("Error decoding JSON response: %v", err)
 	}
 

@@ -4,15 +4,13 @@ import "fmt"
 
 func (s *CartService) AddCartItem(userId uint64, sku uint32, count uint16) error {
 	productDto, err := s.prods.Product(sku)
-
 	if err != nil {
 		return err
 	}
 
 	product := ProductToEntity(productDto)
 
-	err = product.Validate()
-	if err != nil {
+	if err := product.Validate(); err != nil {
 		return fmt.Errorf("Invalid item: sku=%d", sku)
 	}
 

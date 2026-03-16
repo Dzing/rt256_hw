@@ -27,9 +27,7 @@ func NewConfig(cfgPath string) (*Config, error) {
 	}
 
 	config := &Config{}
-	err = yaml.Unmarshal(yamlFile, &config)
-
-	if err != nil {
+	if err := yaml.Unmarshal(yamlFile, &config); err != nil {
 		return nil, fmt.Errorf("config error: fail to unmarshal from file %s", cfgPath)
 	}
 

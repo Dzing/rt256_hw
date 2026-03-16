@@ -43,8 +43,8 @@ func (s *LomsHttpClient) OrderCreate(user uint64, cartContent *uc.OrderContentDT
 	if err != nil {
 		return nil, fmt.Errorf("Error marshalling JSON: %v", err)
 	}
-	resp, err := http.Post(s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
 
+	resp, err := http.Post(s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, fmt.Errorf("Error POST request execution: %v", err)
 	}
@@ -56,8 +56,7 @@ func (s *LomsHttpClient) OrderCreate(user uint64, cartContent *uc.OrderContentDT
 	}
 
 	var respData orderCreateResponseBody
-	err = json.NewDecoder(resp.Body).Decode(&respData)
-	if err != nil {
+	if err = json.NewDecoder(resp.Body).Decode(&respData); err != nil {
 		return nil, fmt.Errorf("Error decoding JSON response: %v", err)
 	}
 
