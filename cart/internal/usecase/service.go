@@ -7,33 +7,33 @@ import (
 var ErrInsufficientStock = errors.New("Insufficient stock")
 
 type (
-	ICartRepo interface {
+	CartRepo interface {
 		AddItem(ownerId uint64, itemId uint32, count uint16) error
 		DeleteItem(ownerId uint64, itemId uint32) error
 		Cart(ownerId uint64) (*CartDTO, error)
 		Clear(ownerId uint64) error
 	}
 
-	ILomsClient interface {
+	LomsClient interface {
 		StockInfo(Sku uint32) (*StockInfoDTO, error)
 		OrderCreate(user uint64, cartContent *OrderContentDTO) (*OrderDto, error)
 	}
 
-	IProductServiceClient interface {
+	ProductServiceClient interface {
 		Product(Sku uint32) (*ProductDTO, error)
 	}
 
 	CartService struct {
-		repo  ICartRepo
-		loms  ILomsClient
-		prods IProductServiceClient
+		repo  CartRepo
+		loms  LomsClient
+		prods ProductServiceClient
 	}
 )
 
 func NewCartService(
-	repo ICartRepo,
-	lomsClient ILomsClient,
-	productServiceClient IProductServiceClient,
+	repo CartRepo,
+	lomsClient LomsClient,
+	productServiceClient ProductServiceClient,
 ) *CartService {
 	return &CartService{
 		repo:  repo,

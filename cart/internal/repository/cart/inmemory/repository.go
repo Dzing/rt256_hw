@@ -50,4 +50,4 @@ func NewCartRepoInmemory() *CartRepoInmemory {
 }
 
 // проверка соответствия интерфейсу
-var _ usecase.ICartRepo = (*CartRepoInmemory)(nil)
+var _ usecase.CartRepo = (*CartRepoInmemory)(nil)

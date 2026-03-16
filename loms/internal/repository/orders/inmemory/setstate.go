@@ -6,7 +6,7 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
-// SetState implements [usecase.IOrdersRepository].
+// SetState implements [usecase.OrdersRepository].
 func (this *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState usecase.EOrderState) error {
 	this.mu.Lock()
 	defer this.mu.Unlock()

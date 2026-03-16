@@ -4,7 +4,7 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
-// CreateOrder implements [usecase.IOrdersRepository].
+// CreateOrder implements [usecase.OrdersRepository].
 func (this *OrdersRepoInmemory) CreateOrder(data *usecase.OrderCreateDTO) (usecase.TOrderId, error) {
 	this.mu.Lock()
 	defer this.mu.Unlock()

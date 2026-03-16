@@ -6,7 +6,7 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
-// Info implements [usecase.IOrdersRepository].
+// Info implements [usecase.OrdersRepository].
 func (this *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoDTO, error) {
 	this.mu.Lock()
 	defer this.mu.Unlock()

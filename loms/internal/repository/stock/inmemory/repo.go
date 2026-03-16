@@ -29,4 +29,4 @@ func (this *StockRepoInmemory) remains(sku TSku) int64 {
 
 }
 
-var _ usecase.IStockRepository = (*StockRepoInmemory)(nil)
+var _ usecase.StockRepository = (*StockRepoInmemory)(nil)

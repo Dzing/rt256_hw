@@ -2,7 +2,7 @@ package inmemory
 
 import "atlas.chr/vaa/route-hw/loms/internal/usecase"
 
-// Add implements [usecase.IStockRepository].
+// Add implements [usecase.StockRepository].
 func (this *StockRepoInmemory) StockAdd(stockAddData *usecase.ItemCountListDTO) error {
 	this.mu.Lock()
 	defer this.mu.Unlock()

@@ -6,7 +6,7 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
-// ReserveCreate implements [usecase.IStockRepository].
+// ReserveCreate implements [usecase.StockRepository].
 func (this *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO) error {
 	this.mu.Lock()
 	defer this.mu.Unlock()

@@ -4,7 +4,7 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
-// StockInfo implements [usecase.IStockRepository].
+// StockInfo implements [usecase.StockRepository].
 func (this *StockRepoInmemory) StockInfo(sku usecase.TSku) (*usecase.StockInfoDTO, error) {
 
 	this.mu.Lock()

@@ -19,4 +19,4 @@ func NewOrdersRepoInmemory() *OrdersRepoInmemory {
 	}
 }
 
-var _ usecase.IOrdersRepository = (*OrdersRepoInmemory)(nil)
+var _ usecase.OrdersRepository = (*OrdersRepoInmemory)(nil)
