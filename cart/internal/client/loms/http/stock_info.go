@@ -26,8 +26,6 @@ func (s *LomsHttpClient) StockInfo(sku uint32) (*uc.StockInfoDTO, error) {
 		sku: sku,
 	}
 
-	var err error
-
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshalling JSON: %v", err)

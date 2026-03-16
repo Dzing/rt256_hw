@@ -19,10 +19,9 @@ type (
 func (c *CartHttpController) CartItemAdd(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
-	var err error
 	var reqBody cartAddItemRequestBody
 
-	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	err := json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return

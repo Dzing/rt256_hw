@@ -10,8 +10,6 @@ func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entit
 		Items:  items.Items,
 	}
 
-	var err error
-
 	orderId, err := s.orderRepo.CreateOrder(data)
 	if err != nil {
 		return nil, err

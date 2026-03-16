@@ -3,8 +3,6 @@ package usecase
 import "github.com/vaa/hw/cart/internal/entity"
 
 func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
-	var err error
-
 	cart, err := s.repo.Cart(userId)
 
 	if err != nil {
