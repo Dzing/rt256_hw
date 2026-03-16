@@ -16,7 +16,6 @@ func (r *StockRepoInmemory) StockAdd(stockAddData *usecase.ItemCountListDTO) err
 }
 
 func (r *StockRepoInmemory) fetchStockRecord(sku TSku) *StockItemRecord {
-
 	stockRecord, ok := r.stock[sku]
 	if !ok {
 		stockRecord = &StockItemRecord{

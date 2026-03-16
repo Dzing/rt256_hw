@@ -7,7 +7,6 @@ import (
 )
 
 func (s *LOMSService) FindOrder(orderId TOrderId) (*entity.Order, error) {
-
 	var err error
 
 	orderInfo, err := s.orderRepo.Info(orderId)

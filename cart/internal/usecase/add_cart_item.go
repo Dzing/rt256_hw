@@ -3,7 +3,6 @@ package usecase
 import "fmt"
 
 func (s *CartService) AddCartItem(userId uint64, sku uint32, count uint16) error {
-
 	var err error
 	productDto, err := s.prods.Product(sku)
 

@@ -24,7 +24,6 @@ type (
 )
 
 func (c *CartHttpController) CartList(w http.ResponseWriter, r *http.Request) {
-
 	defer r.Body.Close()
 
 	var reqBody cartListRequestBody

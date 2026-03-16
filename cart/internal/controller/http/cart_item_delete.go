@@ -13,7 +13,6 @@ type (
 )
 
 func (c *CartHttpController) CartItemDelete(w http.ResponseWriter, r *http.Request) {
-
 	defer r.Body.Close()
 
 	var err error

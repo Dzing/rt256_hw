@@ -1,9 +1,6 @@
 package usecase
 
 func (s *LOMSService) StockInfo(sku TSku) (*StockInfoDTO, error) {
-
-	var err error
-
 	info, err := s.stockRepo.StockInfo(sku)
 	if err != nil {
 		return nil, err
@@ -14,5 +11,4 @@ func (s *LOMSService) StockInfo(sku TSku) (*StockInfoDTO, error) {
 		Reserved:  info.Reserved,
 		Available: info.Count - info.Reserved,
 	}, nil
-
 }

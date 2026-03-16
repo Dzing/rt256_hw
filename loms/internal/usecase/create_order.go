@@ -5,7 +5,6 @@ import (
 )
 
 func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entity.Order, error) {
-
 	data := &OrderCreateDTO{
 		UserId: user,
 		Items:  items.Items,

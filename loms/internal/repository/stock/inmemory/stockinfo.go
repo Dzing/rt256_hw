@@ -6,7 +6,6 @@ import (
 
 // StockInfo implements [usecase.StockRepository].
 func (r *StockRepoInmemory) StockInfo(sku usecase.TSku) (*usecase.StockInfoDTO, error) {
-
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

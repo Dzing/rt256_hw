@@ -3,7 +3,6 @@ package usecase
 import "github.com/vaa/hw/cart/internal/entity"
 
 func (s *CartService) FindCart(userId uint64) (*entity.Cart, error) {
-
 	cartData, err := s.repo.Cart(userId)
 
 	if err != nil {

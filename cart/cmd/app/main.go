@@ -16,7 +16,6 @@ import (
 )
 
 func run(cfg *config.Config) error {
-
 	// Репозитории.
 	cartRepo := inmemory.NewCartRepoInmemory()
 
@@ -48,7 +47,6 @@ func run(cfg *config.Config) error {
 }
 
 func main() {
-
 	configPath := flag.String("cfgpath", "", "path to config file in yaml format")
 	flag.Parse()
 

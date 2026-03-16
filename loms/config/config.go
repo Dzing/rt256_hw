@@ -17,7 +17,6 @@ type (
 
 // NewConfig returns app config.
 func NewConfig(cfgPath string) (*Config, error) {
-
 	if cfgPath == "" {
 		return nil, fmt.Errorf("config error: %s", "no path found")
 	}

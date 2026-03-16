@@ -32,5 +32,7 @@ func (c *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: отправить ответ
+
 	w.WriteHeader(http.StatusOK)
 }

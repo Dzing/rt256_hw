@@ -1,7 +1,6 @@
 package usecase
 
 func (s *LOMSService) CancelOrder(orderId TOrderId) error {
-
 	var err error
 
 	orderInfo, err := s.orderRepo.Info(orderId)

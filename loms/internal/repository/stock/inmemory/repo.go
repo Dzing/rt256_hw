@@ -20,7 +20,6 @@ func NewStockRepoInmemory() *StockRepoInmemory {
 }
 
 func (r *StockRepoInmemory) remains(sku TSku) int64 {
-
 	stock, ok := r.stock[sku]
 	if ok {
 		return int64(stock.Count - stock.Reserve)

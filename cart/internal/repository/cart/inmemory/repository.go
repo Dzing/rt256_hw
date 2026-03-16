@@ -26,9 +26,8 @@ type (
 	}
 )
 
+// Если записи нет - будет создана.
 func (r *CartRepoInmemory) fetchCart(userId TUserId) *cartData {
-	// если записи нет - создаст
-
 	fetchCart, ok := r.carts[userId]
 
 	if !ok {

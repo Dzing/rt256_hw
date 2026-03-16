@@ -39,7 +39,6 @@ func run(
 }
 
 func main() {
-
 	configPath := flag.String("cfgpath", "", "path to config file in yaml format")
 	flag.Parse()
 

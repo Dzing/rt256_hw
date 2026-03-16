@@ -20,7 +20,6 @@ type (
 )
 
 func (s *LomsHttpClient) StockInfo(sku uint32) (*uc.StockInfoDTO, error) {
-
 	path := "/stock/info"
 
 	body := stockInfoRequestPayload{
