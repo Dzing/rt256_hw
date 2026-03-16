@@ -22,7 +22,7 @@ type (
 )
 
 /**/
-func (this *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request) {
+func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var err error
@@ -48,7 +48,7 @@ func (this *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Reque
 		)
 	}
 
-	order, err := this.lomsService.CreateOrder(
+	order, err := c.lomsService.CreateOrder(
 		usecase.TUserId(reqBody.UserId),
 		&itemList,
 	)

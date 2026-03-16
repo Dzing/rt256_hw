@@ -7,9 +7,9 @@ import (
 )
 
 // SetState implements [usecase.OrdersRepository].
-func (this *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState usecase.EOrderState) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (r *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState usecase.EOrderState) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
 	_orderState, err := OrderStateToRepoType(orderState)
 
@@ -17,7 +17,7 @@ func (this *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState us
 		return err
 	}
 
-	order, ok := this.orders[TOrderId(orderId)]
+	order, ok := r.orders[TOrderId(orderId)]
 	if !ok {
 		return fmt.Errorf("No order found orderId=%v", orderId)
 	}

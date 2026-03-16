@@ -1,20 +1,20 @@
 package usecase
 
-func (this *LOMSService) CancelOrder(orderId TOrderId) error {
+func (s *LOMSService) CancelOrder(orderId TOrderId) error {
 
 	var err error
 
-	orderInfo, err := this.orderRepo.Info(orderId)
+	orderInfo, err := s.orderRepo.Info(orderId)
 	if err != nil {
 		return err
 	}
 
-	err = this.stockRepo.ReserveCancel(&ItemCountListDTO{Items: orderInfo.Items})
+	err = s.stockRepo.ReserveCancel(&ItemCountListDTO{Items: orderInfo.Items})
 	if err != nil {
 		return err
 	}
 
-	err = this.orderRepo.SetState(orderId, OrderStateCancelled)
+	err = s.orderRepo.SetState(orderId, OrderStateCancelled)
 	if err != nil {
 		return err
 	}

@@ -7,13 +7,13 @@ import (
 )
 
 // Info implements [usecase.OrdersRepository].
-func (this *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoDTO, error) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (r *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoDTO, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
 	//var err error
 
-	order, ok := this.orders[TOrderId(data)]
+	order, ok := r.orders[TOrderId(data)]
 
 	if !ok {
 		return nil, fmt.Errorf("Order Not found id=%v", data)

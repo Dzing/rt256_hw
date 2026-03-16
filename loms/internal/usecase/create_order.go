@@ -4,7 +4,7 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/entity"
 )
 
-func (this *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entity.Order, error) {
+func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entity.Order, error) {
 
 	data := &OrderCreateDTO{
 		UserId: user,
@@ -13,20 +13,20 @@ func (this *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*en
 
 	var err error
 	// создать новый заказ
-	orderId, err := this.orderRepo.CreateOrder(data)
+	orderId, err := s.orderRepo.CreateOrder(data)
 	if err != nil {
 		return nil, err
 	}
 
-	err = this.stockRepo.ReserveCreate(items)
+	err = s.stockRepo.ReserveCreate(items)
 	if err != nil {
-		this.orderRepo.SetState(orderId, OrderStateFailed)
+		s.orderRepo.SetState(orderId, OrderStateFailed)
 		return nil, ErrInsufficientStock
 	}
 
-	this.orderRepo.SetState(orderId, OrderStateAwaitingPayment)
+	s.orderRepo.SetState(orderId, OrderStateAwaitingPayment)
 
-	orderInfo, err := this.orderRepo.Info(orderId)
+	orderInfo, err := s.orderRepo.Info(orderId)
 	if err != nil {
 		return nil, err
 	}

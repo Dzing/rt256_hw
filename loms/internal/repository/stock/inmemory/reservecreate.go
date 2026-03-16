@@ -7,13 +7,13 @@ import (
 )
 
 // ReserveCreate implements [usecase.StockRepository].
-func (this *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (r *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
 	// проверить наличие остатков
 	for _, reserveDataItem := range reserveData.Items {
-		remains := this.remains(TSku(reserveDataItem.Sku))
+		remains := r.remains(TSku(reserveDataItem.Sku))
 		if remains < int64(reserveDataItem.Count) {
 			return fmt.Errorf("Insufficient stock sku=%v", reserveDataItem.Sku)
 		}
@@ -21,7 +21,7 @@ func (this *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListD
 
 	// создать записи
 	for _, reserveDataItem := range reserveData.Items {
-		skuStock, _ := this.stock[TSku(reserveDataItem.Sku)]
+		skuStock, _ := r.stock[TSku(reserveDataItem.Sku)]
 		skuStock.Reserve += TCount(reserveDataItem.Count)
 	}
 

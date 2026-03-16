@@ -7,12 +7,12 @@ import (
 )
 
 // ReserveCancel implements [usecase.StockRepository].
-func (this *StockRepoInmemory) ReserveCancel(reserveData *usecase.ItemCountListDTO) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (r *StockRepoInmemory) ReserveCancel(reserveData *usecase.ItemCountListDTO) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
 	for _, dataItem := range reserveData.Items {
-		stock, ok := this.stock[TSku(dataItem.Sku)]
+		stock, ok := r.stock[TSku(dataItem.Sku)]
 		if !ok {
 			return fmt.Errorf("Unknown sku=%v", dataItem.Sku)
 		}
@@ -22,7 +22,7 @@ func (this *StockRepoInmemory) ReserveCancel(reserveData *usecase.ItemCountListD
 	}
 
 	for _, dataItem := range reserveData.Items {
-		stock, _ := this.stock[TSku(dataItem.Sku)]
+		stock, _ := r.stock[TSku(dataItem.Sku)]
 		stock.Reserve -= TCount(dataItem.Count)
 	}
 

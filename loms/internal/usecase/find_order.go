@@ -6,11 +6,11 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/entity"
 )
 
-func (this *LOMSService) FindOrder(orderId TOrderId) (*entity.Order, error) {
+func (s *LOMSService) FindOrder(orderId TOrderId) (*entity.Order, error) {
 
 	var err error
 
-	orderInfo, err := this.orderRepo.Info(orderId)
+	orderInfo, err := s.orderRepo.Info(orderId)
 
 	if err != nil {
 		return nil, err

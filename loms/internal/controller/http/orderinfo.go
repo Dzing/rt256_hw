@@ -23,7 +23,7 @@ type (
 	}
 )
 
-func (this *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
+func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var err error
@@ -35,7 +35,7 @@ func (this *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	order, err := this.lomsService.FindOrder(usecase.TOrderId(reqBody.OrderId))
+	order, err := c.lomsService.FindOrder(usecase.TOrderId(reqBody.OrderId))
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

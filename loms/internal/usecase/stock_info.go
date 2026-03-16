@@ -1,10 +1,10 @@
 package usecase
 
-func (this *LOMSService) StockInfo(sku TSku) (*StockInfoDTO, error) {
+func (s *LOMSService) StockInfo(sku TSku) (*StockInfoDTO, error) {
 
 	var err error
 
-	info, err := this.stockRepo.StockInfo(sku)
+	info, err := s.stockRepo.StockInfo(sku)
 	if err != nil {
 		return nil, err
 	}

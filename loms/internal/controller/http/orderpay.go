@@ -13,7 +13,7 @@ type (
 	}
 )
 
-func (this *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
+func (c *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var err error
@@ -25,7 +25,7 @@ func (this *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	err = this.lomsService.PayOrder(usecase.TOrderId(reqBody.OrderId))
+	err = c.lomsService.PayOrder(usecase.TOrderId(reqBody.OrderId))
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

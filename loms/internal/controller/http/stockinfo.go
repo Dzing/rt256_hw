@@ -17,7 +17,7 @@ type (
 	}
 )
 
-func (this *LomsHttpController) StockInfo(w http.ResponseWriter, r *http.Request) {
+func (c *LomsHttpController) StockInfo(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var err error
@@ -29,7 +29,7 @@ func (this *LomsHttpController) StockInfo(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	info, err := this.lomsService.StockInfo(usecase.TSku(reqBody.Sku))
+	info, err := c.lomsService.StockInfo(usecase.TSku(reqBody.Sku))
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

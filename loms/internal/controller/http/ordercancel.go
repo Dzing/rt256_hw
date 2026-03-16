@@ -13,7 +13,7 @@ type (
 	}
 )
 
-func (this *LomsHttpController) OrderCancel(w http.ResponseWriter, r *http.Request) {
+func (c *LomsHttpController) OrderCancel(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var err error
@@ -25,7 +25,7 @@ func (this *LomsHttpController) OrderCancel(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = this.lomsService.CancelOrder(usecase.TOrderId(reqBody.OrderId))
+	err = c.lomsService.CancelOrder(usecase.TOrderId(reqBody.OrderId))
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

@@ -5,9 +5,9 @@ import (
 )
 
 // CreateOrder implements [usecase.OrdersRepository].
-func (this *OrdersRepoInmemory) CreateOrder(data *usecase.OrderCreateDTO) (usecase.TOrderId, error) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (r *OrdersRepoInmemory) CreateOrder(data *usecase.OrderCreateDTO) (usecase.TOrderId, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
 	orderItems := make([]OrderItemRecord, 1)
 	for _, item := range data.Items {
@@ -24,7 +24,7 @@ func (this *OrdersRepoInmemory) CreateOrder(data *usecase.OrderCreateDTO) (useca
 		Items:      orderItems,
 	}
 
-	this.orders[newOrder.OrderId] = newOrder
+	r.orders[newOrder.OrderId] = newOrder
 
 	return usecase.TOrderId(newOrder.OrderId), nil
 

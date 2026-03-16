@@ -19,9 +19,9 @@ func NewStockRepoInmemory() *StockRepoInmemory {
 	}
 }
 
-func (this *StockRepoInmemory) remains(sku TSku) int64 {
+func (r *StockRepoInmemory) remains(sku TSku) int64 {
 
-	stock, ok := this.stock[sku]
+	stock, ok := r.stock[sku]
 	if ok {
 		return int64(stock.Count - stock.Reserve)
 	}
