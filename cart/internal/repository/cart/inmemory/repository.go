@@ -49,5 +49,5 @@ func NewCartRepoInmemory() *CartRepoInmemory {
 	}
 }
 
-// проверка соответствия интерфейсу
+// Gроверка соответствия интерфейсу.
 var _ usecase.CartRepo = (*CartRepoInmemory)(nil)

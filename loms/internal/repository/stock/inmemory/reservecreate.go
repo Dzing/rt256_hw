@@ -11,7 +11,7 @@ func (r *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO)
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	// проверить наличие остатков
+	// Проверка остатков.
 	for _, reserveDataItem := range reserveData.Items {
 		remains := r.remains(TSku(reserveDataItem.Sku))
 		if remains < int64(reserveDataItem.Count) {
@@ -19,7 +19,7 @@ func (r *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO)
 		}
 	}
 
-	// создать записи
+	// Создание записей.
 	for _, reserveDataItem := range reserveData.Items {
 		skuStock, _ := r.stock[TSku(reserveDataItem.Sku)]
 		skuStock.Reserve += TCount(reserveDataItem.Count)

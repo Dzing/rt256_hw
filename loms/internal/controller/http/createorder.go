@@ -21,7 +21,6 @@ type (
 	}
 )
 
-/**/
 func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 

@@ -12,7 +12,7 @@ func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entit
 	}
 
 	var err error
-	// создать новый заказ
+
 	orderId, err := s.orderRepo.CreateOrder(data)
 	if err != nil {
 		return nil, err

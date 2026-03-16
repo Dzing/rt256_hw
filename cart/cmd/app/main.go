@@ -17,20 +17,18 @@ import (
 
 func run(cfg *config.Config) error {
 
-	// репозитории
+	// Репозитории.
 	cartRepo := inmemory.NewCartRepoInmemory()
 
-	// клиенты
+	// Клиенты
 	lomsClient := lomshttpclient.NewLomsHttpClient(cfg.Loms.Addr)
 	prodClient := prodhttpclient.NewProductServiceHttpClient(cfg.Prod.Addr, cfg.Prod.Token)
 
-	// бизнес-логика
+	// Бизнес-логика
 	cartService := uc.NewCartService(cartRepo, lomsClient, prodClient)
 
-	// контроллеры
+	// Контроллеры
 	httpCtrl := httpcontroller.NewCartHttpController(cartService)
-
-	//
 
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)

@@ -11,8 +11,6 @@ func (r *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoDTO,
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	//var err error
-
 	order, ok := r.orders[TOrderId(data)]
 
 	if !ok {

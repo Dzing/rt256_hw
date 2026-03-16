@@ -13,7 +13,7 @@ import (
 func run(
 	cfg *config.Config,
 ) error {
-
+	// TODO:
 	// репозитории
 	// клиенты
 	// бизнес-логика
@@ -21,7 +21,7 @@ func run(
 	// http сервер
 
 	mux := http.NewServeMux()
-	// TODO:
+
 	//httpCtrl.SetupRoutes(mux)
 
 	addr := fmt.Sprintf(":%s", cfg.Http.Addr)

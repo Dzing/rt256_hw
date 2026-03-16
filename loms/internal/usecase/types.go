@@ -11,9 +11,9 @@ type (
 )
 
 const (
-	OrderStateNew             EOrderState = iota // при создании заказа
-	OrderStateAwaitingPayment                    // при успехе резервирования
-	OrderStatePayed                              // при успехе оплаты
-	OrderStateCancelled                          // при ручной или автоматической отмене заказа
-	OrderStateFailed                             // при неудаче резервирования
+	OrderStateNew             EOrderState = iota // При создании заказа.
+	OrderStateAwaitingPayment                    // При успехе резервирования.
+	OrderStatePayed                              // При успехе оплаты.
+	OrderStateCancelled                          // При ручной или автоматической отмене заказа.
+	OrderStateFailed                             // При неудаче резервирования.
 )

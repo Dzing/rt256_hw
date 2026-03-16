@@ -20,8 +20,6 @@ type (
 	}
 )
 
-/**/
-
 func NewOrdersService(orderRepo OrdersRepository, stockRepo StockRepository) *LOMSService {
 	return &LOMSService{
 		orderRepo: orderRepo,

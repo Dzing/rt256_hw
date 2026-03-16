@@ -32,7 +32,6 @@ var OrderStateChangeRules = map[EOrderState]map[EOrderState]struct{}{
 }
 
 func CanChangeToOrderState(newState EOrderState, oldState EOrderState) bool {
-	//
 	rule, ok := OrderStateChangeRules[oldState]
 	if !ok {
 		return false

@@ -12,13 +12,6 @@ type (
 		Http struct {
 			Addr string `yaml:"addr"`
 		} `yaml:"http"`
-		// Loms struct {
-		// 	Addr string `yaml:"addr"`
-		// } `yaml:"loms"`
-		// Prod struct {
-		// 	Addr  string `yaml:"addr"`
-		// 	Token string `yaml:"token"`
-		// } `yaml:"prod"`
 	}
 )
 
