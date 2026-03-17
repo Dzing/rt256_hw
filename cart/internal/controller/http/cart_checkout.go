@@ -2,6 +2,7 @@ package httpcontroller
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -12,7 +13,11 @@ type (
 )
 
 func (c *CartHttpController) CartCheckout(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			log.Printf("error closing response body: %v\n", err)
+		}
+	}()
 
 	var reqBody cartCheckoutRequestBody
 

@@ -2,6 +2,7 @@ package httpcontroller
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
@@ -22,7 +23,11 @@ type (
 )
 
 func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			log.Printf("error closing response body: %v\n", err)
+		}
+	}()
 
 	var reqBody createOrderRequestBody
 

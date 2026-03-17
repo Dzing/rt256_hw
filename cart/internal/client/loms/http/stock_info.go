@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	uc "github.com/vaa/hw/cart/internal/usecase"
@@ -36,7 +37,11 @@ func (s *LomsHttpClient) StockInfo(sku uint32) (*uc.StockInfoDTO, error) {
 		return nil, fmt.Errorf("Error POST request execution: %v", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("error closing response body: %v\n", err)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("POST request failed with status: %s", resp.Status)

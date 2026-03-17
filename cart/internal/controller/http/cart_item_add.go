@@ -3,6 +3,7 @@ package httpcontroller
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/vaa/hw/cart/internal/usecase"
@@ -17,7 +18,11 @@ type (
 )
 
 func (c *CartHttpController) CartItemAdd(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			log.Printf("error closing response body: %v\n", err)
+		}
+	}()
 
 	var reqBody cartAddItemRequestBody
 
