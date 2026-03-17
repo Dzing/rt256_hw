@@ -18,12 +18,12 @@ func (r *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState useca
 
 	order, ok := r.orders[TOrderId(orderId)]
 	if !ok {
-		return fmt.Errorf("No order found orderId=%v", orderId)
+		return fmt.Errorf("no order found orderId=%v", orderId)
 	}
 
 	// сверка с диаграммой состояний
 	if !CanChangeToOrderState(_orderState, order.OrderState) {
-		return fmt.Errorf("Order state changing Not allowed")
+		return fmt.Errorf("order state changing Not allowed")
 	}
 
 	order.OrderState = _orderState

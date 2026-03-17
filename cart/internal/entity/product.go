@@ -12,7 +12,7 @@ type (
 
 func (t *Product) Validate() error {
 	if t.Name == "" {
-		return fmt.Errorf("Name is empty")
+		return fmt.Errorf("'Name' value is empty")
 	}
 	return nil
 }

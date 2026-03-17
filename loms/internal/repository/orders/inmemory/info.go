@@ -14,7 +14,7 @@ func (r *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoDTO,
 	order, ok := r.orders[TOrderId(data)]
 
 	if !ok {
-		return nil, fmt.Errorf("Order Not found id=%v", data)
+		return nil, fmt.Errorf("order Not found id=%v", data)
 	}
 
 	itemsDTO := make([]*usecase.SkuCountRecord, 1)

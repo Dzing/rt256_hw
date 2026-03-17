@@ -14,10 +14,10 @@ func (r *StockRepoInmemory) ReserveRemove(reserveData *usecase.ItemCountListDTO)
 	for _, dataItem := range reserveData.Items {
 		stock, ok := r.stock[TSku(dataItem.Sku)]
 		if !ok {
-			return fmt.Errorf("Unknown sku=%v", dataItem.Sku)
+			return fmt.Errorf("unknown sku=%v", dataItem.Sku)
 		}
 		if stock.Reserve < TCount(dataItem.Count) {
-			return fmt.Errorf("Insufficient reserve sku=%v", dataItem.Sku)
+			return fmt.Errorf("insufficient reserve sku=%v", dataItem.Sku)
 		}
 	}
 

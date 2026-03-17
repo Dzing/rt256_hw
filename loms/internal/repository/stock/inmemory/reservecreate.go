@@ -15,7 +15,7 @@ func (r *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO)
 	for _, reserveDataItem := range reserveData.Items {
 		remains := r.remains(TSku(reserveDataItem.Sku))
 		if remains < int64(reserveDataItem.Count) {
-			return fmt.Errorf("Insufficient stock sku=%v", reserveDataItem.Sku)
+			return fmt.Errorf("insufficient stock sku=%v", reserveDataItem.Sku)
 		}
 	}
 

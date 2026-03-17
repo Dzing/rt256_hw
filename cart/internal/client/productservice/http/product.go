@@ -36,12 +36,12 @@ func (s *ProductServiceHttpClient) Product(sku uint32) (*usecase.ProductDTO, err
 
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
-		return nil, fmt.Errorf("Error marshalling JSON: %v", err)
+		return nil, fmt.Errorf("error marshalling JSON: %v", err)
 	}
 
 	resp, err := http.Post(s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return nil, fmt.Errorf("Error POST request execution: %v", err)
+		return nil, fmt.Errorf("error POST request execution: %v", err)
 	}
 
 	defer func() {
@@ -56,7 +56,7 @@ func (s *ProductServiceHttpClient) Product(sku uint32) (*usecase.ProductDTO, err
 
 	var respData responsePayload
 	if err = json.NewDecoder(resp.Body).Decode(&respData); err != nil {
-		return nil, fmt.Errorf("Error decoding JSON response: %v", err)
+		return nil, fmt.Errorf("error decoding JSON response: %v", err)
 	}
 
 	return &usecase.ProductDTO{Sku: sku, Name: respData.Name, Price: uint64(respData.Price)}, nil

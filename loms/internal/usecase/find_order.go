@@ -15,7 +15,7 @@ func (s *LOMSService) FindOrder(orderId TOrderId) (*entity.Order, error) {
 	order := OrderToEntity(orderInfo)
 
 	if order == nil {
-		return nil, fmt.Errorf("Data corrupted")
+		return nil, fmt.Errorf("data corrupted")
 	}
 
 	return order, nil

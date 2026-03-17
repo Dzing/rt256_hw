@@ -34,11 +34,11 @@ func run(cfg *config.Config) error {
 
 	addr := fmt.Sprintf("%s", cfg.Http.Addr)
 
-	fmt.Printf("Server is running on %s\n", addr)
+	fmt.Printf("server is running on %s\n", addr)
 	fmt.Println()
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		log.Fatalf("failed to start server: %v", err)
 		return err
 	}
 

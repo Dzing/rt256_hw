@@ -11,7 +11,7 @@ func (s *CartService) AddCartItem(userId uint64, sku uint32, count uint16) error
 	product := ProductToEntity(productDto)
 
 	if err := product.Validate(); err != nil {
-		return fmt.Errorf("Invalid item: sku=%d", sku)
+		return fmt.Errorf("invalid item: sku=%d", sku)
 	}
 
 	stockInfo, err := s.loms.StockInfo(sku)

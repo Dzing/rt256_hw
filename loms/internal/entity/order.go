@@ -33,16 +33,16 @@ const (
 
 func (o *Order) Validate() error {
 	if o.Id == 0 {
-		return fmt.Errorf("Invalid Order instance")
+		return fmt.Errorf("invalid Order instance")
 	}
 	if o.UserId == 0 {
-		return fmt.Errorf("Order owner Unknown")
+		return fmt.Errorf("order owner Unknown")
 	}
 	if o.State == -1 {
-		return fmt.Errorf("Order state Unknown")
+		return fmt.Errorf("order state Unknown")
 	}
 	if len(o.Items) == 0 {
-		return fmt.Errorf("No items in Order")
+		return fmt.Errorf("no items in Order")
 	}
 	return nil
 }

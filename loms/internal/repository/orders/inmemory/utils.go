@@ -55,6 +55,6 @@ func OrderStateToRepoType(orderState usecase.EOrderState) (EOrderState, error) {
 	case usecase.OrderStateCancelled:
 		return OrderStateCancelled, nil
 	default:
-		return -1, fmt.Errorf("Unexpexted Order State value")
+		return -1, fmt.Errorf("unexpexted Order State value")
 	}
 }

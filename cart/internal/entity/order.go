@@ -10,7 +10,7 @@ type (
 
 func (t *Order) Validate() error {
 	if t.OrderId != 0 {
-		return fmt.Errorf("ID is empty")
+		return fmt.Errorf("'ID' value is empty")
 	}
 	return nil
 }

@@ -51,6 +51,6 @@ func orderStateToEntityType(orderState EOrderState) (entity.EOrderState, error) 
 	case OrderStateCancelled:
 		return entity.OrderStateCancelled, nil
 	default:
-		return -1, fmt.Errorf("Unexpected Order State value")
+		return -1, fmt.Errorf("unexpected Order State value")
 	}
 }
