@@ -27,6 +27,9 @@ func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entit
 		return nil, err
 	}
 
+	// Запуск таймера автоотмены заказа.
+	s.payWaiter.New(orderId)
+
 	newOrder := OrderToEntity(orderInfo)
 	return newOrder, nil
 }

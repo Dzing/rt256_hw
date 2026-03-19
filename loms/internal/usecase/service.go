@@ -17,12 +17,16 @@ type (
 	LOMSService struct {
 		orderRepo OrdersRepository
 		stockRepo StockRepository
+		payWaiter *OrderPayWaiter
 	}
 )
 
 func NewOrdersService(orderRepo OrdersRepository, stockRepo StockRepository) *LOMSService {
-	return &LOMSService{
+	s := &LOMSService{
 		orderRepo: orderRepo,
 		stockRepo: stockRepo,
+		payWaiter: NewOrderPayTimeWaiter(),
 	}
+	s.payWaiter.SetHandler(s)
+	return s
 }
