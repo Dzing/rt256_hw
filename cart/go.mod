@@ -1,4 +1,4 @@
-module atlas.chr/vaa/hw/cart
+module route/cart
 
 go 1.25.6
 

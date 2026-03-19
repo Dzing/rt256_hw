@@ -3,7 +3,7 @@ package inmemory
 import (
 	"fmt"
 
-	"atlas.chr/vaa/route-hw/loms/internal/usecase"
+	"route/loms/internal/usecase"
 )
 
 // ReserveCancel implements [usecase.StockRepository].

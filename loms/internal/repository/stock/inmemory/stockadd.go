@@ -1,6 +1,6 @@
 package inmemory
 
-import "atlas.chr/vaa/route-hw/loms/internal/usecase"
+import "route/loms/internal/usecase"
 
 // Add implements [usecase.StockRepository].
 func (r *StockRepoInmemory) StockAdd(stockAddData *usecase.ItemCountListDTO) error {

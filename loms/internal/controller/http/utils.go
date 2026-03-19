@@ -1,6 +1,6 @@
 package httpcontroller
 
-import "atlas.chr/vaa/route-hw/loms/internal/entity"
+import "route/loms/internal/entity"
 
 func OrderStateToString(state entity.EOrderState) string {
 	switch state {

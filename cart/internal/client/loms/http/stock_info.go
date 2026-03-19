@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	uc "atlas.chr/vaa/hw/cart/internal/usecase"
+	uc "route/cart/internal/usecase"
 )
 
 type (

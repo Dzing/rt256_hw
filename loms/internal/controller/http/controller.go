@@ -1,8 +1,8 @@
 package httpcontroller
 
 import (
-	"atlas.chr/vaa/route-hw/loms/internal/entity"
-	"atlas.chr/vaa/route-hw/loms/internal/usecase"
+	"route/loms/internal/entity"
+	"route/loms/internal/usecase"
 )
 
 type (

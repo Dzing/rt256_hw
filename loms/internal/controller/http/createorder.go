@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"atlas.chr/vaa/route-hw/loms/internal/usecase"
+	"route/loms/internal/usecase"
 )
 
 type (

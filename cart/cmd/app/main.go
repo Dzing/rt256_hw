@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"os"
 
-	"atlas.chr/vaa/hw/cart/config"
-	lomshttpclient "atlas.chr/vaa/hw/cart/internal/client/loms/http"
-	prodhttpclient "atlas.chr/vaa/hw/cart/internal/client/productservice/http"
-	httpcontroller "atlas.chr/vaa/hw/cart/internal/controller/http"
-	cartrepo "atlas.chr/vaa/hw/cart/internal/repository/cart/inmemory"
-	uc "atlas.chr/vaa/hw/cart/internal/usecase"
+	"route/cart/config"
+	lomshttpclient "route/cart/internal/client/loms/http"
+	prodhttpclient "route/cart/internal/client/productservice/http"
+	httpcontroller "route/cart/internal/controller/http"
+	cartrepo "route/cart/internal/repository/cart/inmemory"
+	uc "route/cart/internal/usecase"
 )
 
 func run(cfg *config.Config) error {

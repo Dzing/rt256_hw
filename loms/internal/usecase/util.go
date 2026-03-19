@@ -3,7 +3,7 @@ package usecase
 import (
 	"fmt"
 
-	"atlas.chr/vaa/route-hw/loms/internal/entity"
+	"route/loms/internal/entity"
 )
 
 func OrderToEntity(data *OrderInfoDTO) *entity.Order {

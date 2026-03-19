@@ -1,6 +1,6 @@
 package usecase
 
-import "atlas.chr/vaa/hw/cart/internal/entity"
+import "route/cart/internal/entity"
 
 func (s *CartService) FindCart(userId uint64) (*entity.Cart, error) {
 	cartData, err := s.repo.Cart(userId)

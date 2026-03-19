@@ -1,4 +1,4 @@
-module atlas.chr/vaa/route-hw/loms
+module route/loms
 
 go 1.25.6
 

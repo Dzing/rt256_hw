@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"atlas.chr/vaa/route-hw/loms/internal/entity"
+	"route/loms/internal/entity"
 )
 
 func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entity.Order, error) {

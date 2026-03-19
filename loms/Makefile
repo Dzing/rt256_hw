@@ -1,9 +1,9 @@
 CURDIR=$(shell pwd)
 BINDIR=${CURDIR}/bin
-PACKAGE=atlas.chr/vaa/hw/loms/cmd/app
+PACKAGE=route/loms/cmd/app
 
 build: bindir
-	go build -o ${BINDIR}/loms ${PACKAGE}
+	go build -buildvcs=false -o ${BINDIR}/loms ${PACKAGE}
 
 bindir:
 	mkdir -p ${BINDIR}

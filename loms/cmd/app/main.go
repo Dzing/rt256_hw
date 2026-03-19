@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"os"
 
-	"atlas.chr/vaa/route-hw/loms/config"
-	httpcontroller "atlas.chr/vaa/route-hw/loms/internal/controller/http"
-	ordersrepo "atlas.chr/vaa/route-hw/loms/internal/repository/orders/inmemory"
-	stockrepo "atlas.chr/vaa/route-hw/loms/internal/repository/stock/inmemory"
-	"atlas.chr/vaa/route-hw/loms/internal/usecase"
+	"route/loms/config"
+	httpcontroller "route/loms/internal/controller/http"
+	ordersrepo "route/loms/internal/repository/orders/inmemory"
+	stockrepo "route/loms/internal/repository/stock/inmemory"
+	"route/loms/internal/usecase"
 )
 
 func run(

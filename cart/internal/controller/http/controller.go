@@ -1,7 +1,7 @@
 package httpcontroller
 
 import (
-	"atlas.chr/vaa/hw/cart/internal/entity"
+	"route/cart/internal/entity"
 )
 
 type (
