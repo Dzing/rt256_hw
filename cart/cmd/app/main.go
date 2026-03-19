@@ -7,26 +7,26 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/vaa/hw/cart/config"
-	lomshttpclient "github.com/vaa/hw/cart/internal/client/loms/http"
-	prodhttpclient "github.com/vaa/hw/cart/internal/client/productservice/http"
-	httpcontroller "github.com/vaa/hw/cart/internal/controller/http"
-	inmemory "github.com/vaa/hw/cart/internal/repository/cart/inmemory"
-	uc "github.com/vaa/hw/cart/internal/usecase"
+	"atlas.chr/vaa/hw/cart/config"
+	lomshttpclient "atlas.chr/vaa/hw/cart/internal/client/loms/http"
+	prodhttpclient "atlas.chr/vaa/hw/cart/internal/client/productservice/http"
+	httpcontroller "atlas.chr/vaa/hw/cart/internal/controller/http"
+	cartrepo "atlas.chr/vaa/hw/cart/internal/repository/cart/inmemory"
+	uc "atlas.chr/vaa/hw/cart/internal/usecase"
 )
 
 func run(cfg *config.Config) error {
 	// Репозитории.
-	cartRepo := inmemory.NewCartRepoInmemory()
+	cartRepo := cartrepo.NewCartRepoInmemory()
 
-	// Клиенты
+	// Клиенты.
 	lomsClient := lomshttpclient.NewLomsHttpClient(cfg.Loms.Addr)
 	prodClient := prodhttpclient.NewProductServiceHttpClient(cfg.Prod.Addr, cfg.Prod.Token)
 
-	// Бизнес-логика
+	// Бизнес-логика.
 	cartService := uc.NewCartService(cartRepo, lomsClient, prodClient)
 
-	// Контроллеры
+	// Контроллеры.
 	httpCtrl := httpcontroller.NewCartHttpController(cartService)
 
 	mux := http.NewServeMux()
@@ -35,7 +35,6 @@ func run(cfg *config.Config) error {
 	addr := fmt.Sprintf("%s", cfg.Http.Addr)
 
 	fmt.Printf("server is running on %s\n", addr)
-	fmt.Println()
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("failed to start server: %v", err)

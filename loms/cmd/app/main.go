@@ -8,26 +8,33 @@ import (
 	"os"
 
 	"atlas.chr/vaa/route-hw/loms/config"
+	httpcontroller "atlas.chr/vaa/route-hw/loms/internal/controller/http"
+	ordersrepo "atlas.chr/vaa/route-hw/loms/internal/repository/orders/inmemory"
+	stockrepo "atlas.chr/vaa/route-hw/loms/internal/repository/stock/inmemory"
+	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
 func run(
 	cfg *config.Config,
 ) error {
-	// TODO:
-	// репозитории
-	// клиенты
-	// бизнес-логика
+	// Репозитории.
+	ordersRepo := ordersrepo.NewOrdersRepoInmemory()
+	stockRepo := stockrepo.NewStockRepoInmemory()
+
+	// Бизнес-логика.
+	lomsService := usecase.NewOrdersService(ordersRepo, stockRepo)
+
 	// контроллеры
+	httpCtrl := httpcontroller.NewLomsHttpController(lomsService)
+
 	// http сервер
 
 	mux := http.NewServeMux()
-
-	//httpCtrl.SetupRoutes(mux)
+	httpCtrl.SetupRoutes(mux)
 
 	addr := fmt.Sprintf(":%s", cfg.Http.Addr)
 
 	fmt.Printf("Server is running on %s\n", addr)
-	fmt.Println()
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("Failed to start server: %v", err)

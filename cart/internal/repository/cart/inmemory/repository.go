@@ -3,7 +3,7 @@ package inmemory
 import (
 	"sync"
 
-	"github.com/vaa/hw/cart/internal/usecase"
+	"atlas.chr/vaa/hw/cart/internal/usecase"
 )
 
 type (

@@ -9,7 +9,7 @@ import (
 var lastOrderId TOrderId
 
 func NextOrderId() TOrderId {
-	// значение счётчика нужно как-то сохранять между сессиями, но пока этого нет
+	// Значение счётчика нужно как-то сохранять между сессиями, но пока этого нет.
 	lastOrderId++
 	return lastOrderId
 }

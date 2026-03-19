@@ -2,7 +2,7 @@ package httpcontroller
 
 import "net/http"
 
-func (c *LomsHttpController) SetRoutes(mux *http.ServeMux) {
+func (c *LomsHttpController) SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/order/create", c.CreateOrder)
 	mux.HandleFunc("/order/info", c.OrderInfo)
 	mux.HandleFunc("/order/info", c.OrderPay)

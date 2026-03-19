@@ -1,4 +1,4 @@
-module github.com/vaa/hw/cart
+module atlas.chr/vaa/hw/cart
 
 go 1.25.6
 

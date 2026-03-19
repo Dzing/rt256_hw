@@ -10,6 +10,10 @@ type (
 	cartCheckoutRequestBody struct {
 		User uint64 `json:"user"`
 	}
+
+	cartCheckoutResponseBody struct {
+		OrderId uint64 `json:"orderId"`
+	}
 )
 
 func (c *CartHttpController) CartCheckout(w http.ResponseWriter, r *http.Request) {
@@ -26,4 +30,21 @@ func (c *CartHttpController) CartCheckout(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	order, err := c.cartService.CartCheckout(reqBody.User)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	respBody := cartCheckoutResponseBody{
+		OrderId: order.OrderId,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(respBody); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/vaa/hw/cart/internal/usecase"
+	"atlas.chr/vaa/hw/cart/internal/usecase"
 )
 
 type (

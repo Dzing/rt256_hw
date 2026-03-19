@@ -6,13 +6,6 @@ import (
 	"atlas.chr/vaa/route-hw/loms/internal/entity"
 )
 
-var orderNoIterator int64
-
-func genOrderId() int64 {
-	orderNoIterator++
-	return orderNoIterator
-}
-
 func OrderToEntity(data *OrderInfoDTO) *entity.Order {
 	state_e, err := orderStateToEntityType(data.OrderState)
 	if err != nil {

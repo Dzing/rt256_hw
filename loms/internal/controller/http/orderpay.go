@@ -21,7 +21,7 @@ func (c *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	var reqBody orderInfoRequestBody
+	var reqBody orderPayRequestBody
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -32,8 +32,6 @@ func (c *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	// TODO: отправить ответ
 
 	w.WriteHeader(http.StatusOK)
 }

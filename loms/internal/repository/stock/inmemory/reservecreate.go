@@ -1,8 +1,6 @@
 package inmemory
 
 import (
-	"fmt"
-
 	"atlas.chr/vaa/route-hw/loms/internal/usecase"
 )
 
@@ -15,7 +13,7 @@ func (r *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO)
 	for _, reserveDataItem := range reserveData.Items {
 		remains := r.remains(TSku(reserveDataItem.Sku))
 		if remains < int64(reserveDataItem.Count) {
-			return fmt.Errorf("insufficient stock sku=%v", reserveDataItem.Sku)
+			return &usecase.InsufficientStockError{Sku: reserveDataItem.Sku}
 		}
 	}
 

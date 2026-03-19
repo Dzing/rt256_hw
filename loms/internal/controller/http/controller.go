@@ -18,7 +18,7 @@ type (
 	}
 )
 
-func NewHttpController(srvc ILomsService) *LomsHttpController {
+func NewLomsHttpController(srvc ILomsService) *LomsHttpController {
 	return &LomsHttpController{
 		lomsService: srvc,
 	}

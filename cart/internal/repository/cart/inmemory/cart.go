@@ -1,7 +1,7 @@
 package inmemory
 
 import (
-	uc "github.com/vaa/hw/cart/internal/usecase"
+	uc "atlas.chr/vaa/hw/cart/internal/usecase"
 )
 
 func (r *CartRepoInmemory) Cart(ownerId uint64) (*uc.CartDTO, error) {

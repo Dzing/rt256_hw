@@ -2,6 +2,7 @@ package httpcontroller
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 
@@ -56,8 +57,11 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 	)
 
 	if err != nil {
+		if errors.As(err, &usecase.ErrInsufficientStock) {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
-		return
 	}
 
 	respBody := createOrderResponseBody{
