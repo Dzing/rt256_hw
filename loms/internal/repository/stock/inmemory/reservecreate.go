@@ -19,7 +19,7 @@ func (r *StockRepoInmemory) ReserveCreate(reserveData *usecase.ItemCountListDTO)
 
 	// Создание записей.
 	for _, reserveDataItem := range reserveData.Items {
-		skuStock, _ := r.stock[TSku(reserveDataItem.Sku)]
+		skuStock := r.stock[TSku(reserveDataItem.Sku)]
 		skuStock.Reserve += TCount(reserveDataItem.Count)
 	}
 

@@ -32,7 +32,7 @@ func run(cfg *config.Config) error {
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)
 
-	addr := fmt.Sprintf("%s", cfg.Http.Addr)
+	addr := cfg.Http.Addr
 
 	fmt.Printf("server is running on %s\n", addr)
 

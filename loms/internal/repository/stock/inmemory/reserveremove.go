@@ -22,7 +22,7 @@ func (r *StockRepoInmemory) ReserveRemove(reserveData *usecase.ItemCountListDTO)
 	}
 
 	for _, dataItem := range reserveData.Items {
-		stock, _ := r.stock[TSku(dataItem.Sku)]
+		stock := r.stock[TSku(dataItem.Sku)]
 		stock.Reserve -= TCount(dataItem.Count)
 		stock.Count -= TCount(dataItem.Count)
 	}

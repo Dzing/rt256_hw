@@ -16,8 +16,8 @@ type (
 		Price uint32
 	}
 	requestPayload struct {
-		sku   uint32
-		token string
+		Sku   uint32
+		Token string
 	}
 
 	responsePayload struct {
@@ -30,8 +30,8 @@ func (s *ProductServiceHttpClient) Product(sku uint32) (*usecase.ProductDTO, err
 	path := "/get_product"
 
 	body := requestPayload{
-		sku:   sku,
-		token: s.token,
+		Sku:   sku,
+		Token: s.token,
 	}
 
 	jsonBody, err := json.Marshal(body)

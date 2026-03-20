@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-var ErrInsufficientStock = errors.New("Insufficient stock")
+var ErrInsufficientStock = errors.New("insufficient stock")
 
 type (
 	CartRepo interface {

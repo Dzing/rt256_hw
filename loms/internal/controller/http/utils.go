@@ -16,6 +16,5 @@ func OrderStateToString(state entity.EOrderState) string {
 		return "falied"
 	default:
 		return "unknown"
-
 	}
 }

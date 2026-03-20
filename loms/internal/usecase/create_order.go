@@ -16,11 +16,13 @@ func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entit
 	}
 
 	if err := s.stockRepo.ReserveCreate(items); err != nil {
-		s.orderRepo.SetState(orderId, OrderStateFailed)
+		_ = s.orderRepo.SetState(orderId, OrderStateFailed)
 		return nil, err
 	}
 
-	s.orderRepo.SetState(orderId, OrderStateAwaitingPayment)
+	if err := s.orderRepo.SetState(orderId, OrderStateAwaitingPayment); err != nil {
+		return nil, err
+	}
 
 	orderInfo, err := s.orderRepo.Info(orderId)
 	if err != nil {

@@ -23,7 +23,7 @@ func (r *OrdersRepoInmemory) SetState(orderId usecase.TOrderId, orderState useca
 
 	// Cверка с диаграммой состояний.
 	if !CanChangeToOrderState(_orderState, order.OrderState) {
-		return fmt.Errorf("order state changing Not allowed")
+		return fmt.Errorf("not allowed to change state from `%v` to `%v`", OrderStateToString(order.OrderState), OrderStateToString(_orderState))
 	}
 
 	order.OrderState = _orderState

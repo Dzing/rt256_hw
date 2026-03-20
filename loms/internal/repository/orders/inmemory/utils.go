@@ -58,3 +58,20 @@ func OrderStateToRepoType(orderState usecase.EOrderState) (EOrderState, error) {
 		return -1, fmt.Errorf("unexpexted Order State value")
 	}
 }
+
+func OrderStateToString(state EOrderState) string {
+	switch state {
+	case OrderStateNew:
+		return "new"
+	case OrderStateAwaitingPayment:
+		return "awaiting payment"
+	case OrderStatePayed:
+		return "payed"
+	case OrderStateCancelled:
+		return "cancelled"
+	case OrderStateFailed:
+		return "falied"
+	default:
+		return "unknown"
+	}
+}

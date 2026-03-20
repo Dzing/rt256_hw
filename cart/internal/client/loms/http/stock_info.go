@@ -12,7 +12,7 @@ import (
 
 type (
 	stockInfoRequestPayload struct {
-		sku uint32
+		Sku uint32
 	}
 
 	stockInfoResponsePayload struct {
@@ -24,7 +24,7 @@ func (s *LomsHttpClient) StockInfo(sku uint32) (*uc.StockInfoDTO, error) {
 	path := "/stock/info"
 
 	body := stockInfoRequestPayload{
-		sku: sku,
+		Sku: sku,
 	}
 
 	jsonBody, err := json.Marshal(body)
