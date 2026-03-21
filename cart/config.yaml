@@ -1,7 +1,7 @@
 http:
-  addr: "localhost:10050"
+  addr: ":8080"
 loms:
-  addr: ":10051"
+  addr: "loms:8080"
 prod:
   addr: "route256.pavl.uk:8082"
   token: "testtoken"

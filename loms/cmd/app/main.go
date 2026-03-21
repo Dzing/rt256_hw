@@ -32,7 +32,7 @@ func run(
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)
 
-	addr := fmt.Sprintf(":%s", cfg.Http.Addr)
+	addr := fmt.Sprintf("%s", cfg.Http.Addr)
 
 	fmt.Printf("Server is running on %s\n", addr)
 
@@ -51,7 +51,7 @@ func main() {
 
 	path_ := *configPath
 	if path_ == "" {
-		path_ = os.Getenv("CART_CONF")
+		path_ = os.Getenv("LOMS_CONF")
 	}
 
 	cfg, err := config.NewConfig(path_)
