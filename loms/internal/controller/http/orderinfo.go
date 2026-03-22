@@ -2,7 +2,8 @@ package httpcontroller
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
+	"log/slog"
 	"net/http"
 
 	"route/loms/internal/usecase"
@@ -27,20 +28,25 @@ type (
 func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if err := r.Body.Close(); err != nil {
-			log.Printf("error closing response body: %v\n", err)
+			slog.Error(fmt.Sprintf("failed to close response body: %v\n", err))
 		}
 	}()
 
+	slog.Info("handling request OrderInfo")
 	var reqBody orderInfoRequestBody
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err.Error())
+		slog.Error(fmt.Sprintf("unable to decode body : %+v\n", err))
 		return
 	}
 
 	order, err := c.lomsService.FindOrder(usecase.TOrderId(reqBody.OrderId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err.Error())
+		slog.Error(fmt.Sprintf("failed to find order : %+v\n", err))
 		return
 	}
 
@@ -61,6 +67,7 @@ func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(respBody); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		slog.Error(fmt.Sprintf("failed to encode response : %+v\n", respBody))
 		return
 	}
 	w.WriteHeader(http.StatusOK)

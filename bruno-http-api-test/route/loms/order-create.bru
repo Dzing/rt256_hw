@@ -1,0 +1,23 @@
+meta {
+  name: order-create
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8082/order/create
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "user":123,
+      "items":[{"sku":42, "count":1}]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

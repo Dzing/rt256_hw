@@ -15,7 +15,7 @@ type (
 		OrderId    TOrderId
 		UserId     TUserId
 		OrderState EOrderState
-		Items      []OrderItemRecord
+		Items      []*OrderItemRecord
 	}
 
 	EOrderState int

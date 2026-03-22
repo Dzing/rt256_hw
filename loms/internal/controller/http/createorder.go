@@ -3,7 +3,8 @@ package httpcontroller
 import (
 	"encoding/json"
 	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"net/http"
 
 	"route/loms/internal/usecase"
@@ -26,24 +27,27 @@ type (
 func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if err := r.Body.Close(); err != nil {
-			log.Printf("error closing response body: %v\n", err)
+			slog.Error(fmt.Sprintf("failed to close response body: %v\n", err))
 		}
 	}()
 
+	slog.Info("handling request CreateOrder")
 	var reqBody createOrderRequestBody
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err.Error())
+		slog.Error(fmt.Sprintf("unable to decode body : %+v\n", err))
 		return
 	}
 
-	itemList := usecase.ItemCountListDTO{
-		Items: make([]*usecase.SkuCountRecord, 1),
-	}
+	slog.Info("decoded request", "body", fmt.Sprintf("%++v", reqBody))
+
+	items := make([]*usecase.SkuCountRecord, 0)
 
 	for _, data := range reqBody.Items {
-		itemList.Items = append(
-			itemList.Items,
+		items = append(
+			items,
 			&usecase.SkuCountRecord{
 				Sku:   usecase.TSku(data.Sku),
 				Count: usecase.TCount(data.Count),
@@ -51,14 +55,20 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 		)
 	}
 
+	itemList := &usecase.ItemCountListDTO{
+		Items: items,
+	}
+
 	order, err := c.lomsService.CreateOrder(
 		usecase.TUserId(reqBody.UserId),
-		&itemList,
+		itemList,
 	)
 
 	if err != nil {
 		if errors.As(err, &usecase.ErrInsufficientStock) {
 			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(err.Error())
+			slog.Error(fmt.Sprintf("failed to create order : %+v\n", err))
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
@@ -71,6 +81,7 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(respBody); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		slog.Error(fmt.Sprintf("failed to encode response : %+v\n", respBody))
 		return
 	}
 

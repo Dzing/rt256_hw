@@ -9,9 +9,9 @@ func (r *OrdersRepoInmemory) CreateOrder(data *usecase.OrderCreateDTO) (usecase.
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	orderItems := make([]OrderItemRecord, 1)
+	orderItems := make([]*OrderItemRecord, 1)
 	for _, item := range data.Items {
-		orderItems = append(orderItems, OrderItemRecord{
+		orderItems = append(orderItems, &OrderItemRecord{
 			Sku:   TSku(item.Sku),
 			Count: TCount(item.Count),
 		})
