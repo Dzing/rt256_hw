@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 
-	"route/cart/config"
 	lomshttpclient "route/cart/internal/client/loms/http"
 	prodhttpclient "route/cart/internal/client/productservice/http"
+	"route/cart/internal/config"
 	httpcontroller "route/cart/internal/controller/http"
 	cartrepo "route/cart/internal/repository/cart/inmemory"
 	uc "route/cart/internal/usecase"
@@ -32,14 +32,12 @@ func run(cfg *config.Config) error {
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)
 
-	addr := cfg.Http.Addr
-
-	fmt.Printf("server is running on %s\n", addr)
-
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	if err := http.ListenAndServe(cfg.Http.Addr, mux); err != nil {
 		log.Fatalf("failed to start server: %v", err)
 		return err
 	}
+
+	fmt.Printf("server is running on %s\n", cfg.Http.Addr)
 
 	return nil
 

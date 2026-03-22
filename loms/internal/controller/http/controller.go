@@ -16,9 +16,6 @@ type (
 	LomsHttpController struct {
 		lomsService ILomsService
 	}
-	errorBody struct {
-		Err string `json:"err"`
-	}
 )
 
 func NewLomsHttpController(srvc ILomsService) *LomsHttpController {

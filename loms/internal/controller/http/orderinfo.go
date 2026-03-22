@@ -37,7 +37,7 @@ func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(err.Error())
+		_ = json.NewEncoder(w).Encode(err.Error())
 		slog.Error(fmt.Sprintf("unable to decode body : %+v\n", err))
 		return
 	}
@@ -45,7 +45,7 @@ func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 	order, err := c.lomsService.FindOrder(usecase.TOrderId(reqBody.OrderId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(err.Error())
+		_ = json.NewEncoder(w).Encode(err.Error())
 		slog.Error(fmt.Sprintf("failed to find order : %+v\n", err))
 		return
 	}

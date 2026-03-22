@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"route/loms/config"
+	"route/loms/internal/config"
 	httpcontroller "route/loms/internal/controller/http"
 	ordersrepo "route/loms/internal/repository/orders/inmemory"
 	stockrepo "route/loms/internal/repository/stock/inmemory"
@@ -17,6 +17,8 @@ import (
 func run(
 	cfg *config.Config,
 ) error {
+	//logger := nil
+
 	// Репозитории.
 	ordersRepo := ordersrepo.NewOrdersRepoInmemory()
 	stockRepo := stockrepo.NewStockRepoInmemory()
@@ -32,14 +34,12 @@ func run(
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)
 
-	addr := fmt.Sprintf("%s", cfg.Http.Addr)
-
-	fmt.Printf("Server is running on %s\n", addr)
-
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	if err := http.ListenAndServe(cfg.Http.Addr, mux); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 		return err
 	}
+
+	fmt.Printf("Server is running on %s\n", cfg.Http.Addr)
 
 	return nil
 
@@ -56,14 +56,12 @@ func main() {
 
 	cfg, err := config.NewConfig(path_)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		log.Fatalf("failed to load config: %v", err)
 	}
 
 	if err := run(
 		cfg,
 	); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		log.Fatalf("failed to run application: %v", err)
 	}
 }

@@ -36,7 +36,7 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(err.Error())
+		_ = json.NewEncoder(w).Encode(err.Error())
 		slog.Error(fmt.Sprintf("unable to decode body : %+v\n", err))
 		return
 	}
@@ -67,7 +67,7 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		if errors.As(err, &usecase.ErrInsufficientStock) {
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(err.Error())
+			_ = json.NewEncoder(w).Encode(err.Error())
 			slog.Error(fmt.Sprintf("failed to create order : %+v\n", err))
 			return
 		}
