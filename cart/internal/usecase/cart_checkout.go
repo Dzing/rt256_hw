@@ -10,7 +10,7 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 
 	var orderContent OrderContentDTO
 
-	items := make([]*OrderContentItemDTO, 1)
+	items := make([]*OrderContentItemDTO, 0)
 	for _, listData := range cart.Items {
 		items = append(items, &OrderContentItemDTO{Sku: listData.Sku, Count: listData.Count})
 	}

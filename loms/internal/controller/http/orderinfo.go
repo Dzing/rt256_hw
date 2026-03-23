@@ -32,7 +32,6 @@ func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	slog.Info("handling request OrderInfo")
 	var reqBody orderInfoRequestBody
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
@@ -45,12 +44,12 @@ func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 	order, err := c.lomsService.FindOrder(usecase.TOrderId(reqBody.OrderId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		_ = json.NewEncoder(w).Encode(err.Error())
+		_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 		slog.Error(fmt.Sprintf("failed to find order : %+v\n", err))
 		return
 	}
 
-	items := make([]*orderInfoItemRecord, 1)
+	items := make([]*orderInfoItemRecord, 0)
 	for _, itemData := range order.Items {
 		items = append(items, &orderInfoItemRecord{
 			Sku:   uint32(itemData.Sku),
@@ -59,7 +58,7 @@ func (c *LomsHttpController) OrderInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respBody := orderInfoResponseBody{
-		Status: OrderStateToString(order.State),
+		Status: usecase.OrderStateToString(usecase.EOrderState(order.State)),
 		UserId: uint64(order.UserId),
 		Items:  items,
 	}

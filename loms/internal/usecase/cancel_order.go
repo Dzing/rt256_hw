@@ -1,16 +1,14 @@
 package usecase
 
-import "fmt"
-
 func (s *LOMSService) CancelOrder(orderId TOrderId) error {
 	orderInfo, err := s.orderRepo.Info(orderId)
 	if err != nil {
 		return err
 	}
 
-	if orderInfo.OrderState != OrderStateAwaitingPayment {
+	if !CanChangeToOrderState(OrderStateCancelled, orderInfo.OrderState) {
 		// Отменить не получится.
-		return fmt.Errorf("unable to cancel order. OrderId=%v", orderId)
+		return &OrderStateMismatchError{OrderId: orderId, State: orderInfo.OrderState}
 	}
 
 	if err := s.stockRepo.ReserveCancel(&ItemCountListDTO{Items: orderInfo.Items}); err != nil {
@@ -20,6 +18,9 @@ func (s *LOMSService) CancelOrder(orderId TOrderId) error {
 	if err := s.orderRepo.SetState(orderId, OrderStateCancelled); err != nil {
 		return err
 	}
+
+	// Остановка таймера автоотмены заказа.
+	s.payWaiter.Stop(orderId)
 
 	return nil
 

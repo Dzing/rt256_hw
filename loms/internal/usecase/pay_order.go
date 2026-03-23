@@ -6,6 +6,11 @@ func (s *LOMSService) PayOrder(orderId TOrderId) error {
 		return err
 	}
 
+	if !CanChangeToOrderState(OrderStatePayed, orderInfo.OrderState) {
+		// Отменить не получится.
+		return &OrderStateMismatchError{OrderId: orderId, State: orderInfo.OrderState}
+	}
+
 	if err := s.stockRepo.ReserveRemove(&ItemCountListDTO{Items: orderInfo.Items}); err != nil {
 		return err
 	}

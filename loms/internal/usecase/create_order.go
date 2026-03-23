@@ -1,20 +1,16 @@
 package usecase
 
 import (
-	"fmt"
-	"log/slog"
 	"route/loms/internal/entity"
 )
 
 func (s *LOMSService) CreateOrder(user TUserId, items *ItemCountListDTO) (*entity.Order, error) {
-	slog.Info("LOMSService.CreateOrder", "user", user, "items", fmt.Sprintf("%++v", *items))
-
-	data := &OrderCreateDTO{
+	createOrderDto := &OrderCreateDTO{
 		UserId: user,
 		Items:  items.Items,
 	}
 
-	orderId, err := s.orderRepo.CreateOrder(data)
+	orderId, err := s.orderRepo.CreateOrder(createOrderDto)
 	if err != nil {
 		return nil, err
 	}

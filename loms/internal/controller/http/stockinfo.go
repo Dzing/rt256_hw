@@ -2,6 +2,7 @@ package httpcontroller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -35,6 +36,7 @@ func (c *LomsHttpController) StockInfo(w http.ResponseWriter, r *http.Request) {
 	info, err := c.lomsService.StockInfo(usecase.TSku(reqBody.Sku))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 		return
 	}
 
@@ -45,6 +47,7 @@ func (c *LomsHttpController) StockInfo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(respBody); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 		return
 	}
 

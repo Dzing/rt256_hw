@@ -23,14 +23,6 @@ type (
 	}
 )
 
-const (
-	OrderStateNew             EOrderState = iota // при создании заказа
-	OrderStateAwaitingPayment                    // при успехе резервирования
-	OrderStatePayed                              // при успехе оплаты
-	OrderStateCancelled                          // при ручной или автоматической отмене заказа
-	OrderStateFailed                             // при неудаче резервирования
-)
-
 func (o *Order) Validate() error {
 	if o.Id == 0 {
 		return fmt.Errorf("invalid Order instance")
