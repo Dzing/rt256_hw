@@ -41,6 +41,7 @@ lint:
 ## lint-install: Устанавливает golangci-lint в локальную папку bin/lint
 lint-install: 
 	@echo "Установка golangci-lint ($(LINTER_VERSION)) в $(LINTER_DIR)..."
+	@rm -rf $(LINTER_DIR)
 	@mkdir -p $(LINTER_DIR)
 	@tmpdir=$$(mktemp -d); \
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$$tmpdir" $(LINTER_VERSION); \

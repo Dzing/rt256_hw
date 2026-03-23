@@ -1,8 +1,8 @@
-FROM golang:1.24
+FROM golang:1.25.6
 
-ADD ./bin/app /app
-ADD ./conf/config.yaml /app/config.yaml
+ADD ./build/bin/ /app
+ADD ./conf/config.yaml /app/loms-config.yaml
 
-ENV LOMS_CONF="/app/config.yaml"
+ENV LOMS_CONF="/app/loms-config.yaml"
 
-CMD ["/app/loms"]
+CMD ["/app/route-loms"]

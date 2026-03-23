@@ -1,3 +1,5 @@
+.PHONY: build-all run-all precommit
+
 build-all:
 	cd cart && GOOS=linux GOARCH=amd64 make build
 	cd loms && GOOS=linux GOARCH=amd64 make build
