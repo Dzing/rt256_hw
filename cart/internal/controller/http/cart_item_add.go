@@ -3,7 +3,9 @@ package httpcontroller
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 
 	"route/cart/internal/usecase"
@@ -32,11 +34,14 @@ func (c *CartHttpController) CartItemAdd(w http.ResponseWriter, r *http.Request)
 	}
 
 	if err := c.cartService.AddCartItem(reqBody.User, reqBody.Sku, reqBody.Count); err != nil {
+		slog.Error(fmt.Sprintf("failed to add cart item: %+v\n", err))
 		if errors.Is(err, usecase.ErrInsufficientStock) {
 			w.WriteHeader(http.StatusPreconditionFailed)
+			_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 		return
 	}
 

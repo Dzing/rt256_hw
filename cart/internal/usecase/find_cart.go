@@ -1,12 +1,17 @@
 package usecase
 
-import "route/cart/internal/entity"
+import (
+	"log"
+	"route/cart/internal/entity"
+)
 
 func (s *CartService) FindCart(userId uint64) (*entity.Cart, error) {
 	cartData, err := s.repo.Cart(userId)
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("Cart data : %++v", *cartData)
 
 	cartItems := make([]*entity.CartItem, 0)
 	for _, cartItem := range cartData.Items {

@@ -60,10 +60,10 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 		itemList,
 	)
 	if err != nil {
+		slog.Error(fmt.Sprintf("failed to create order : %+v\n", err))
 		if errors.As(err, &usecase.ErrInsufficientStock) {
 			w.WriteHeader(http.StatusPreconditionFailed)
 			_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
-			slog.Error(fmt.Sprintf("failed to create order : %+v\n", err))
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)

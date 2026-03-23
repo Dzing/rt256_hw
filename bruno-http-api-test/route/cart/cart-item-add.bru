@@ -1,0 +1,25 @@
+meta {
+  name: cart-item-add
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8081/cart/item/add
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user":123,
+    "sku":32956725,
+    "count":1
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

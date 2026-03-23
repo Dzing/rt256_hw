@@ -1,18 +1,18 @@
 meta {
-  name: opder-pay
+  name: cart-checkout
   type: http
-  seq: 5
+  seq: 6
 }
 
 post {
-  url: http://localhost:8082/order/pay
+  url: http://localhost:8081/cart/checkout
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "orderID":2
+    "user":123
   }
 }
 
