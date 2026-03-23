@@ -1,19 +1,19 @@
 meta {
-  name: order-create
+  name: get_product
   type: http
   seq: 2
 }
 
 post {
-  url: http://localhost:8082/order/create
+  url: http://route256.pavl.uk:8080/get_product
   body: json
   auth: inherit
 }
 
 body:json {
   {
-      "user":123,
-      "items":[{"sku":32956725, "count":1}]
+    "token": "testtoken",
+    "sku": 32956725
   }
 }
 

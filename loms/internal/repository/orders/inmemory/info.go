@@ -2,6 +2,7 @@ package inmemory
 
 import (
 	"fmt"
+	"log/slog"
 
 	"route/loms/internal/usecase"
 )
@@ -11,19 +12,26 @@ func (r *OrdersRepoInmemory) Info(data usecase.TOrderId) (*usecase.OrderInfoDTO,
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
+	slog.Info("OrdersRepoInmemory::Info", "data", fmt.Sprintf("%++v", data))
 	order, ok := r.orders[TOrderId(data)]
 
 	if !ok {
 		return nil, fmt.Errorf("order Not found id=%v", data)
 	}
 
+	slog.Info("- order", "data", fmt.Sprintf("%++v", *order))
+
 	itemsDTO := make([]*usecase.SkuCountRecord, 1)
 
 	for _, item := range order.Items {
-		itemsDTO = append(itemsDTO, &usecase.SkuCountRecord{
+
+		slog.Info("-- order/item", "data", fmt.Sprintf("%++v", *item))
+
+		newRecord := &usecase.SkuCountRecord{
 			Sku:   usecase.TSku(item.Sku),
 			Count: usecase.TCount(item.Count),
-		})
+		}
+		itemsDTO = append(itemsDTO, newRecord)
 	}
 
 	return &usecase.OrderInfoDTO{
