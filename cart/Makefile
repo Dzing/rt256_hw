@@ -1,27 +1,52 @@
-CURDIR=$(shell pwd)
-BINDIR=${CURDIR}/bin
+# Переменные
+BINARY_NAME=route-cart
+BUILD_DIR=build
+BIN_DIR=$(BUILD_DIR)/bin
+LINTER_DIR=$(BUILD_DIR)/lint
+LINTER_NAME=golangci-lint
+LINTER_PATH=$(LINTER_DIR)/$(LINTER_NAME)
+LINTER_VERSION=v2.8.0
+
 PACKAGE=route/cart/cmd/app
 
-GOVER=$(shell go version | perl -nle '/(go\d\S+)/; print $$1;')
-LINTVER=v1.64.8
-LINTBIN=${BINDIR}/lint_${GOVER}_${LINTVER}
+.PHONY: build clean precommit lint lint-install
 
-build: bindir
-	go build -o ${BINDIR}/app/cart ${PACKAGE}
+## build: Собирает проект
+build: 
+	@echo "Сборка проекта ""$(BINARY_NAME)"" ..."
+	@mkdir -p ${BUILD_DIR}
+	go build -v -o ${BIN_DIR}/$(BINARY_NAME) ${PACKAGE}
+	@echo "Сборка завершена! Артефакт: ${BIN_DIR}/$(BINARY_NAME)"
 
-bindir:
-	mkdir -p ${BINDIR}
+## clean: Удаляет артефакты сборки
+clean:
+	@echo "Очистка..."
+	@go clean
+	@rm -rf $(BIN_DIR)
+	@echo "Очистка завершена"
 
 precommit: lint
-	@echo "precommit finish"
+	@echo "Подготовка к коммиту завершена!"
 
-lint: install-lint
-	@echo ">>> check with go vet"
-	go vet ./...
-	@echo ">>> check with golangci-lint"
-	${LINTBIN} run
+## lint: Запускает линтер (автоматически устанавливает при необходимости)
+lint:
+	@echo "Запуск линтера..."
+	@if [ ! -f "$(LINTER_PATH)" ]; then \
+		echo "Линтер не найден. Установка..."; \
+		$(MAKE) lint-install; \
+		echo "Линтер установлен. Повторный запуск..."; \
+	fi
+	$(LINTER_PATH) run ./...
 
-install-lint: bindir
-	test -f ${LINTBIN} || \
-		(GOBIN=${BINDIR} go install github.com/golangci/golangci-lint/cmd/golangci-lint@${LINTVER} && \
-		mv ${BINDIR}/golangci-lint ${LINTBIN})
+## lint-install: Устанавливает golangci-lint в локальную папку bin/lint
+lint-install: 
+	@echo "Установка golangci-lint ($(LINTER_VERSION)) в $(LINTER_DIR)..."
+	@rm -rf $(LINTER_DIR)
+	@mkdir -p $(LINTER_DIR)
+	@tmpdir=$$(mktemp -d); \
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$$tmpdir" $(LINTER_VERSION); \
+	mv "$$tmpdir/$(LINTER_NAME)" $(LINTER_PATH); \
+	rm -rf "$$tmpdir"
+	@echo "Установка завершена: $(LINTER_PATH)"
+
+	

@@ -1,8 +1,8 @@
 FROM golang:1.24
 
-ADD ./bin/app /app
-ADD ./config.yaml /app/config.yaml
+ADD ./build/bin/  /app
+ADD ./conf/config.yaml /app/cart-config.yaml
 
-ENV CART_CONF="/app/config.yaml"
+ENV CART_CONF="/app/cart-config.yaml"
 
-CMD ["/app/cart"]
+CMD ["/app/route-cart"]
