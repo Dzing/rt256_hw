@@ -7,5 +7,5 @@ func (c *LomsHttpController) SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/order/info", c.OrderInfo)
 	mux.HandleFunc("/order/pay", c.OrderPay)
 	mux.HandleFunc("/order/cancel", c.OrderCancel)
-	mux.HandleFunc("/stock/imfo", c.StockInfo)
+	mux.HandleFunc("/stock/info", c.StockInfo)
 }

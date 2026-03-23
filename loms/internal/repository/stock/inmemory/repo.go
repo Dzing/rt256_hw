@@ -14,9 +14,11 @@ type (
 )
 
 func NewStockRepoInmemory() *StockRepoInmemory {
-	return &StockRepoInmemory{
+	repo := &StockRepoInmemory{
 		stock: make(map[TSku]*StockItemRecord),
 	}
+	repo.initTestData()
+	return repo
 }
 
 func (r *StockRepoInmemory) remains(sku TSku) int64 {
@@ -26,6 +28,15 @@ func (r *StockRepoInmemory) remains(sku TSku) int64 {
 	}
 	return 0
 
+}
+
+// Для быстрого тестирования. Добавит несколько записей о наличии SKU
+func (r *StockRepoInmemory) initTestData() {
+	r.stock[TSku(32205848)] = &StockItemRecord{Sku: TSku(1), Count: 10}
+	r.stock[TSku(32605854)] = &StockItemRecord{Sku: TSku(1), Count: 10}
+	r.stock[TSku(32638658)] = &StockItemRecord{Sku: TSku(1), Count: 10}
+	r.stock[TSku(32885918)] = &StockItemRecord{Sku: TSku(1), Count: 10}
+	r.stock[TSku(32956725)] = &StockItemRecord{Sku: TSku(1), Count: 10}
 }
 
 var _ usecase.StockRepository = (*StockRepoInmemory)(nil)
