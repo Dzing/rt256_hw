@@ -1,18 +1,18 @@
 meta {
-  name: orcer-cancel
+  name: cart-list
   type: http
-  seq: 4
+  seq: 1
 }
 
 post {
-  url: http://localhost:8082/order/cancel
+  url: http://localhost:8081/cart/list
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "orderID":3
+    "user":123
   }
 }
 

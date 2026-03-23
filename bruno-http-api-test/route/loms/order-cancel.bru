@@ -1,0 +1,22 @@
+meta {
+  name: order-cancel
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8082/order/cancel
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "orderID":1
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
