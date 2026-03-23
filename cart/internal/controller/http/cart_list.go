@@ -43,7 +43,7 @@ func (c *CartHttpController) CartList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseItems := make([]*cartListResponseItem, 1)
+	responseItems := make([]*cartListResponseItem, 0)
 
 	for _, cartItem := range cart.Items {
 

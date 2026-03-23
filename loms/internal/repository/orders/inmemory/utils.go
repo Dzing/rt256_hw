@@ -1,11 +1,5 @@
 package inmemory
 
-import (
-	"fmt"
-
-	"route/loms/internal/usecase"
-)
-
 var lastOrderId TOrderId
 
 func NextOrderId() TOrderId {
@@ -14,35 +8,7 @@ func NextOrderId() TOrderId {
 	return lastOrderId
 }
 
-var OrderStateChangeRules = map[EOrderState]map[EOrderState]struct{}{
-	OrderStateNew: {
-		OrderStateAwaitingPayment: {},
-		OrderStateFailed:          {},
-		OrderStateCancelled:       {},
-	},
-	OrderStateAwaitingPayment: {
-		OrderStatePayed:     {},
-		OrderStateCancelled: {},
-	},
-	OrderStatePayed: {
-		OrderStateCancelled: {},
-	},
-	OrderStateFailed:    {},
-	OrderStateCancelled: {},
-}
-
-func CanChangeToOrderState(newState EOrderState, oldState EOrderState) bool {
-	rule, ok := OrderStateChangeRules[oldState]
-	if !ok {
-		return false
-	}
-
-	_, canChange := rule[newState]
-
-	return canChange
-}
-
-func OrderStateToRepoType(orderState usecase.EOrderState) (EOrderState, error) {
+/* func OrderStateToRepoType(orderState usecase.EOrderState) (EOrderState, error) {
 	switch orderState {
 	case usecase.OrderStateNew:
 		return OrderStateNew, nil
@@ -57,9 +23,9 @@ func OrderStateToRepoType(orderState usecase.EOrderState) (EOrderState, error) {
 	default:
 		return -1, fmt.Errorf("unexpexted Order State value")
 	}
-}
+} */
 
-func OrderStateToString(state EOrderState) string {
+/* func OrderStateToString(state EOrderState) string {
 	switch state {
 	case OrderStateNew:
 		return "new"
@@ -75,3 +41,4 @@ func OrderStateToString(state EOrderState) string {
 		return "unknown"
 	}
 }
+*/

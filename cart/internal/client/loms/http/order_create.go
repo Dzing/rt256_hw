@@ -27,7 +27,7 @@ type (
 func (s *LomsHttpClient) OrderCreate(user uint64, cartContent *uc.OrderContentDTO) (*uc.OrderDto, error) {
 	path := "/order/create"
 
-	items := make([]itemRecord, 1)
+	items := make([]itemRecord, 0)
 
 	for _, cartItemData := range cartContent.Items {
 		items = append(items, itemRecord{

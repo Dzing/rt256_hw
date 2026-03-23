@@ -8,7 +8,7 @@ func (s *CartService) FindCart(userId uint64) (*entity.Cart, error) {
 		return nil, err
 	}
 
-	cartItems := make([]*entity.CartItem, 1)
+	cartItems := make([]*entity.CartItem, 0)
 	for _, cartItem := range cartData.Items {
 		prodDto, err := s.prods.Product(cartItem.Sku)
 		if err != nil {

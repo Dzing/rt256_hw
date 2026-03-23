@@ -1,0 +1,22 @@
+meta {
+  name: opder-pay
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8082/order/pay
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "orderID":2
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

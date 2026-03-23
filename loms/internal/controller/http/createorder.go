@@ -31,7 +31,6 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 		}
 	}()
 
-	slog.Info("handling request CreateOrder")
 	var reqBody createOrderRequestBody
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
@@ -41,10 +40,7 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	slog.Info("decoded request", "body", fmt.Sprintf("%++v", reqBody))
-
 	items := make([]*usecase.SkuCountRecord, 0)
-
 	for _, data := range reqBody.Items {
 		items = append(
 			items,
@@ -63,28 +59,26 @@ func (c *LomsHttpController) CreateOrder(w http.ResponseWriter, r *http.Request)
 		usecase.TUserId(reqBody.UserId),
 		itemList,
 	)
-
 	if err != nil {
 		if errors.As(err, &usecase.ErrInsufficientStock) {
-			w.WriteHeader(http.StatusInternalServerError)
-			_ = json.NewEncoder(w).Encode(err.Error())
+			w.WriteHeader(http.StatusPreconditionFailed)
+			_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 			slog.Error(fmt.Sprintf("failed to create order : %+v\n", err))
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
+		return
 	}
 
 	respBody := createOrderResponseBody{
 		OrderId: uint64(order.Id),
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(respBody); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		slog.Error(fmt.Sprintf("failed to encode response : %+v\n", respBody))
 		return
 	}
-
 	w.WriteHeader(http.StatusOK)
-
 }

@@ -21,10 +21,10 @@ type (
 	EOrderState int
 )
 
-const (
+/* const (
 	OrderStateNew             EOrderState = iota // при создании заказа
 	OrderStateAwaitingPayment                    // при успехе резервирования
 	OrderStatePayed                              // при успехе оплаты
 	OrderStateCancelled                          // при ручной или автоматической отмене заказа
 	OrderStateFailed                             // при неудаче резервирования
-)
+) */

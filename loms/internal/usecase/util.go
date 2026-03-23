@@ -1,49 +1,66 @@
 package usecase
 
 import (
-	"fmt"
-
 	"route/loms/internal/entity"
 )
 
-func OrderToEntity(data *OrderInfoDTO) *entity.Order {
-	state_e, err := orderStateToEntityType(data.OrderState)
-	if err != nil {
-		return nil
-	}
+var OrderStateChangeRules = map[EOrderState]map[EOrderState]struct{}{
+	OrderStateNew: {
+		OrderStateAwaitingPayment: {},
+		OrderStateFailed:          {},
+		OrderStateCancelled:       {},
+	},
+	OrderStateAwaitingPayment: {
+		OrderStatePayed:     {},
+		OrderStateCancelled: {},
+	},
+	OrderStatePayed: {
+		OrderStateCancelled: {},
+	},
+	OrderStateFailed:    {},
+	OrderStateCancelled: {},
+}
 
+func CanChangeToOrderState(newState EOrderState, oldState EOrderState) bool {
+	rule, ok := OrderStateChangeRules[oldState]
+	if !ok {
+		return false
+	}
+	_, canChange := rule[newState]
+	return canChange
+}
+
+func OrderToEntity(data *OrderInfoDTO) *entity.Order {
 	list := make([]*entity.OrderItemRecord, 0)
 	for _, item := range data.Items {
-		list = append(
-			list,
-			&entity.OrderItemRecord{
-				Sku:   entity.TSku(item.Sku),
-				Count: entity.TCount(item.Count),
-			},
-		)
+		entityOrderItem := &entity.OrderItemRecord{
+			Sku:   entity.TSku(item.Sku),
+			Count: entity.TCount(item.Count),
+		}
+		list = append(list, entityOrderItem)
 	}
 
 	return &entity.Order{
 		Id:     entity.TOrderId(data.OrderId),
 		UserId: entity.TUserId(data.UserId),
-		State:  state_e,
+		State:  entity.EOrderState(data.OrderState),
 		Items:  list,
 	}
 }
 
-func orderStateToEntityType(orderState EOrderState) (entity.EOrderState, error) {
-	switch orderState {
+func OrderStateToString(state EOrderState) string {
+	switch state {
 	case OrderStateNew:
-		return entity.OrderStateNew, nil
+		return "new"
 	case OrderStateAwaitingPayment:
-		return entity.OrderStateAwaitingPayment, nil
+		return "awaiting payment"
 	case OrderStatePayed:
-		return entity.OrderStatePayed, nil
-	case OrderStateFailed:
-		return entity.OrderStateFailed, nil
+		return "payed"
 	case OrderStateCancelled:
-		return entity.OrderStateCancelled, nil
+		return "cancelled"
+	case OrderStateFailed:
+		return "falied"
 	default:
-		return -1, fmt.Errorf("unexpected Order State value")
+		return "unknown"
 	}
 }

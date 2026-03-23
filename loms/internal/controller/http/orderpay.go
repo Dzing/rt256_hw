@@ -2,7 +2,10 @@ package httpcontroller
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 
 	"route/loms/internal/usecase"
@@ -29,7 +32,14 @@ func (c *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := c.lomsService.PayOrder(usecase.TOrderId(reqBody.OrderId)); err != nil {
+		if errors.As(err, &usecase.ErrOrderStateMismatch) {
+			w.WriteHeader(http.StatusPreconditionFailed)
+			_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
+			slog.Error(fmt.Sprintf("failed to pay order : %+v\n", err))
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
 		return
 	}
 

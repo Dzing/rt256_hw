@@ -31,7 +31,7 @@ func (w *OrderPayWaiter) New(orderId TOrderId) *time.Timer {
 		if err := w.h.CancelOrder(orderId); err != nil {
 			log.Println(err)
 		}
-		w.Delete(orderId)
+		w.delete(orderId)
 	})
 	w.timers[orderId] = newTimer
 
@@ -46,15 +46,14 @@ func (w *OrderPayWaiter) Stop(orderId TOrderId) {
 	timer, ok := w.timers[orderId]
 	if ok {
 		timer.Stop()
-		w.Delete(orderId)
+		w.delete(orderId)
 	}
 }
 
-func (w *OrderPayWaiter) Delete(orderId TOrderId) {
+func (w *OrderPayWaiter) delete(orderId TOrderId) {
 	_, ok := w.timers[orderId]
 	if ok {
 		delete(w.timers, orderId)
-
 	}
 }
 
