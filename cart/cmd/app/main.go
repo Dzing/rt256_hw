@@ -32,15 +32,13 @@ func run(cfg *config.Config) error {
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)
 
+	fmt.Printf("server is running on %s\n", cfg.Http.Addr)
 	if err := http.ListenAndServe(cfg.Http.Addr, mux); err != nil {
 		log.Fatalf("failed to start server: %v", err)
 		return err
 	}
 
-	fmt.Printf("server is running on %s\n", cfg.Http.Addr)
-
 	return nil
-
 }
 
 func main() {

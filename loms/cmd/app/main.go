@@ -17,8 +17,6 @@ import (
 func run(
 	cfg *config.Config,
 ) error {
-	//logger := nil
-
 	// Репозитории.
 	ordersRepo := ordersrepo.NewOrdersRepoInmemory()
 	stockRepo := stockrepo.NewStockRepoInmemory()
@@ -30,19 +28,15 @@ func run(
 	httpCtrl := httpcontroller.NewLomsHttpController(lomsService)
 
 	// http сервер
-
 	mux := http.NewServeMux()
 	httpCtrl.SetupRoutes(mux)
 
+	fmt.Printf("Server is running on %s\n", cfg.Http.Addr)
 	if err := http.ListenAndServe(cfg.Http.Addr, mux); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 		return err
 	}
-
-	fmt.Printf("Server is running on %s\n", cfg.Http.Addr)
-
 	return nil
-
 }
 
 func main() {

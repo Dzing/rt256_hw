@@ -45,7 +45,7 @@ func (s *LomsHttpClient) OrderCreate(user uint64, cartContent *uc.OrderContentDT
 		return nil, fmt.Errorf("error marshalling JSON: %v", err)
 	}
 
-	resp, err := http.Post("http://"+s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
+	resp, err := http.Post(s.addr+path, "application/json", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, fmt.Errorf("error POST request execution: %v", err)
 	}
