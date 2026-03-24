@@ -1,0 +1,24 @@
+meta {
+  name: list_skus
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://route256.pavl.uk:8080/list_skus
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "token": "testtoken",
+    "startAfterSku": 0,
+    "count": 100
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

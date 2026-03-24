@@ -1,0 +1,44 @@
+package inmemory
+
+var lastOrderId TOrderId
+
+func NextOrderId() TOrderId {
+	// Значение счётчика нужно как-то сохранять между сессиями, но пока этого нет.
+	lastOrderId++
+	return lastOrderId
+}
+
+/* func OrderStateToRepoType(orderState usecase.EOrderState) (EOrderState, error) {
+	switch orderState {
+	case usecase.OrderStateNew:
+		return OrderStateNew, nil
+	case usecase.OrderStateAwaitingPayment:
+		return OrderStateAwaitingPayment, nil
+	case usecase.OrderStatePayed:
+		return OrderStatePayed, nil
+	case usecase.OrderStateFailed:
+		return OrderStateFailed, nil
+	case usecase.OrderStateCancelled:
+		return OrderStateCancelled, nil
+	default:
+		return -1, fmt.Errorf("unexpexted Order State value")
+	}
+} */
+
+/* func OrderStateToString(state EOrderState) string {
+	switch state {
+	case OrderStateNew:
+		return "new"
+	case OrderStateAwaitingPayment:
+		return "awaiting payment"
+	case OrderStatePayed:
+		return "payed"
+	case OrderStateCancelled:
+		return "cancelled"
+	case OrderStateFailed:
+		return "falied"
+	default:
+		return "unknown"
+	}
+}
+*/

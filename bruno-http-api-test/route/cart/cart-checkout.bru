@@ -1,0 +1,22 @@
+meta {
+  name: cart-checkout
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8081/cart/checkout
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user":123
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

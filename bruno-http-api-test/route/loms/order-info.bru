@@ -1,0 +1,17 @@
+meta {
+  name: order-info
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8082/order/info
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "orderID":4
+  }
+}
