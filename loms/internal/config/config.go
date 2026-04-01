@@ -12,6 +12,9 @@ type (
 		Http struct {
 			Addr string `yaml:"addr"`
 		} `yaml:"http"`
+		Grpc struct {
+			Port uint16 `yaml:"port"`
+		} `yaml:"grpc"`
 	}
 )
 

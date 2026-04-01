@@ -9,9 +9,8 @@ LINTER_VERSION=v2.8.0
 
 PACKAGE=route/cart/cmd/app
 
-.PHONY: build clean precommit lint lint-install
-
 ## build: Собирает проект
+.PHONY: build
 build: 
 	@echo "Сборка проекта ""$(BINARY_NAME)"" ..."
 	@mkdir -p ${BUILD_DIR}
@@ -19,16 +18,20 @@ build:
 	@echo "Сборка завершена! Артефакт: ${BIN_DIR}/$(BINARY_NAME)"
 
 ## clean: Удаляет артефакты сборки
+.PHONY: clean
 clean:
 	@echo "Очистка..."
 	@go clean
 	@rm -rf $(BIN_DIR)
 	@echo "Очистка завершена"
 
+## precommit: Запуск проверок перед коммитом
+.PHONY: precommit
 precommit: lint
 	@echo "Подготовка к коммиту завершена!"
 
 ## lint: Запускает линтер (автоматически устанавливает при необходимости)
+.PHONY: lint
 lint:
 	@echo "Запуск линтера..."
 	@if [ ! -f "$(LINTER_PATH)" ]; then \
@@ -39,6 +42,7 @@ lint:
 	$(LINTER_PATH) run ./...
 
 ## lint-install: Устанавливает golangci-lint в локальную папку bin/lint
+.PHONY: lint-install
 lint-install: 
 	@echo "Установка golangci-lint ($(LINTER_VERSION)) в $(LINTER_DIR)..."
 	@rm -rf $(LINTER_DIR)
@@ -48,5 +52,16 @@ lint-install:
 	mv "$$tmpdir/$(LINTER_NAME)" $(LINTER_PATH); \
 	rm -rf "$$tmpdir"
 	@echo "Установка завершена: $(LINTER_PATH)"
+
+.PHONY: prep
+prep: protoc-install
+
+## lint-install: Устанавливает плагины для protoc
+.PHONY: protoc-install
+protoc-install:
+	@echo "Установка protoc-gen-go@latest"
+	GOBIN=$(BUILD_DIR_FULL) go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	GOBIN=$(BUILD_DIR_FULL) go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
 
 	

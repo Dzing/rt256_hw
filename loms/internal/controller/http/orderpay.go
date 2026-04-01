@@ -32,10 +32,10 @@ func (c *LomsHttpController) OrderPay(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := c.lomsService.PayOrder(usecase.TOrderId(reqBody.OrderId)); err != nil {
+		slog.Error(fmt.Sprintf("failed to pay order : %+v\n", err))
 		if errors.As(err, &usecase.ErrOrderStateMismatch) {
 			w.WriteHeader(http.StatusPreconditionFailed)
 			_ = json.NewEncoder(w).Encode(fmt.Sprint(err))
-			slog.Error(fmt.Sprintf("failed to pay order : %+v\n", err))
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)

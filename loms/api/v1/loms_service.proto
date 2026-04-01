@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package route.loms.pkg.api.v1;
+option go_package = "route/loms/pkg/api/v1;pb_loms";
+
+import "google/api/annotations.proto"; // Required for the http annotation
+
+//
+service Loms {
+    //
+    rpc OrderCreate(OrderCreateRequest) returns (OrderCreateResponse) {
+        option (google.api.http) = {
+            post: "/order/create"
+            body: "*"
+        };
+    }
+    //
+    rpc OrderInfo(OrderInfoRequest) returns (OrderInfoResponse) {
+        option (google.api.http) = {
+            post: "/order/info"
+            body: "*"
+        };
+    }
+    //
+    rpc OrderPay(OrderPayRequest) returns (OrderPayResponse) {
+        option (google.api.http) = {
+            post: "/order/pay"
+            body: "*"
+        };
+    }
+    //
+    rpc OrderCancel(OrderCancelRequest) returns (OrderCancelResponse) {
+        option (google.api.http) = {
+            post: "/order/cancel"
+            body: "*"
+        };
+    }
+    //
+    rpc StockInfo(StockInfoRequest) returns (StockInfoResponse) {
+        option (google.api.http) = {
+            post: "/stock/info"
+            body: "*"
+        };
+    }
+}
+
+//
+enum OrderStatus {
+    UNKNOWN = 0;
+    NEW = 1;
+    AWAITING_PAYMENT = 2;
+    FAILED = 3;
+    PAYED = 4;
+    CANCELLED = 5;
+}
+
+//===========================
+//
+message OrderCreateRequest {
+    message Items {
+        uint32 sku = 1;
+        uint32 count = 2;
+    }
+    uint64 user = 1;
+    repeated Items items = 2;
+}
+//
+message OrderCreateResponse {
+    uint64 order_id = 1;
+}
+
+//===========================
+//
+message OrderInfoRequest {
+    uint64 order_id = 1;
+}
+//
+message OrderInfoResponse {
+    message Item {
+        uint32 sku = 1;
+        uint32 count = 2;
+    }
+    OrderStatus status = 1;
+    uint64 user = 2;
+    repeated Item items = 3;
+}
+
+//===========================
+// 
+message OrderPayRequest{
+    uint64 order_id = 1;
+}
+// 
+message OrderPayResponse{
+    // no data by design
+}
+
+//===========================
+// 
+message OrderCancelRequest{
+    uint64 order_id = 1;
+}
+// 
+message OrderCancelResponse{
+    // no data by design
+}
+
+//===========================
+// 
+message StockInfoRequest{
+    uint32 sku = 1;
+}
+// 
+message StockInfoResponse{
+    uint64 count = 1;
+}
