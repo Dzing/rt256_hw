@@ -25,7 +25,9 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 		return nil, err
 	}
 
-	s.repo.Clear(userId)
+	if err := s.repo.Clear(userId); err != nil {
+		return nil, err
+	}
 
 	return &entity.Order{OrderId: orderCreated.OrderId}, nil
 }

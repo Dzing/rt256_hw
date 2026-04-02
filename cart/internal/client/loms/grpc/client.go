@@ -27,7 +27,6 @@ var retryPolicy = `{
 
 type (
 	LomsGrpcClient struct {
-		addr string
 		pb_c pb_loms.LomsClient
 	}
 )
