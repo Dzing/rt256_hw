@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package route.cart.pkg.api.v1;
+option go_package = "route/cart/pkg/api/v1;pb_cart";
+
+import "google/api/annotations.proto"; // Required for the http annotation
+
+//
+service Cart {
+    //
+    rpc CartItemAdd(CartItemAddRequest) returns (CartItemAddResponse) {
+        option (google.api.http) = {
+            post: "/cart/item/add"
+            body: "*"
+        };
+    }
+    //
+    rpc CartItemDelete(CartItemDeleteRequest) returns (CartItemDeleteResponse) {
+        option (google.api.http) = {
+            post: "/cart/item/delete"
+            body: "*"
+        };
+    }
+    //
+    rpc CartList(CartListRequest) returns (CartListResponse) {
+        option (google.api.http) = {
+            post: "/cart/list"
+            body: "*"
+        };
+    }
+    //
+    rpc CartClear(CartClearRequest) returns (CartClearResponse) {
+        option (google.api.http) = {
+            post: "/cart/clear"
+            body: "*"
+        };
+    }
+    //
+    rpc CartCheckout(CartCheckoutRequest) returns (CartCheckoutResponse) {
+        option (google.api.http) = {
+            post: "/cart/checkout"
+            body: "*"
+        };
+    }
+}
+
+//===========================
+//
+message CartItemAddRequest {
+    uint64 user = 1;
+    uint32 sku = 2;
+    uint32 count = 3;
+}
+//
+message CartItemAddResponse{
+    // no data by design
+}
+//===========================
+//
+message CartItemDeleteRequest{
+    uint64 user = 1;
+    uint32 sku = 2;
+}
+//
+message CartItemDeleteResponse{
+    // no data by design
+}
+//===========================
+//
+message CartListRequest{
+    uint64 user = 1;
+}
+//
+message CartListResponse{
+    message Item {
+        uint32 sku = 1;
+        uint32 count = 2;
+        string name = 3;
+        uint32 price = 4;
+    }
+    repeated Item items = 1;
+    uint32 total_price = 2;
+}
+//===========================
+//
+message CartClearRequest{
+    uint64 user = 1;
+}
+//
+message CartClearResponse{
+    // no data by design
+}
+//===========================
+//
+message CartCheckoutRequest{
+    uint64 user = 1;
+}
+//
+message CartCheckoutResponse{
+    uint64 order_id = 1;
+}

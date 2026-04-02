@@ -8,6 +8,10 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 		return nil, err
 	}
 
+	if len(cart.Items) == 0 {
+		return nil, &CartIsEmptyError{User: TUserId(userId)}
+	}
+
 	var orderContent OrderContentDTO
 
 	items := make([]*OrderContentItemDTO, 0)
@@ -20,6 +24,8 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	s.repo.Clear(userId)
 
 	return &entity.Order{OrderId: orderCreated.OrderId}, nil
 }

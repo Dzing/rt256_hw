@@ -57,12 +57,12 @@ enum OrderStatus {
 //===========================
 //
 message OrderCreateRequest {
-    message Items {
+    message Item {
         uint32 sku = 1;
         uint32 count = 2;
     }
     uint64 user = 1;
-    repeated Items items = 2;
+    repeated Item items = 2;
 }
 //
 message OrderCreateResponse {
