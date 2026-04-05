@@ -1,7 +1,8 @@
-http:
-  addr: ":8080"
+srv:
+  http: ":8080"
+  grpc: ":18080"
 loms:
-  addr: "loms:8080"
+  grpc: "loms:18080"
 prod:
-  addr: "route256.pavl.uk:8080"
+  grpc: "route256.pavl.uk:8082"
   token: "testtoken"

@@ -1,52 +1,109 @@
 # Переменные
-BINARY_NAME=route-loms
-BUILD_DIR=build
-BIN_DIR=$(BUILD_DIR)/bin
-LINTER_DIR=$(BUILD_DIR)/lint
-LINTER_NAME=golangci-lint
-LINTER_PATH=$(LINTER_DIR)/$(LINTER_NAME)
-LINTER_VERSION=v2.8.0
-
+BIN_NAME=route-loms
 PACKAGE=route/loms/cmd/app
 
-.PHONY: build clean precommit lint lint-install
+BUILD_DIR=build
+BUILD_DIR_F=$(CURDIR)/$(BUILD_DIR)
+
+BIN_DIR=$(BUILD_DIR)/bin
+
+PROTOC_PLUGINS_DIR_F=$(BUILD_DIR_F)/protoc-plugins
+
+LINTER_DIR_F=$(BUILD_DIR_F)/lint
+LINTER_NAME=golangci-lint
+LINTER_BIN_F=$(LINTER_DIR_F)/$(LINTER_NAME)
+LINTER_VERSION=v2.8.0
+
+MAKE=make --no-print-directory
+
+## prebuild: Подготавливает необходимое
+.PHONY: prebuild
+prebuild: 
+	@echo "\n[i] Подготовка к сборке $(BIN_NAME) ..."
+	@$(MAKE) .prep-protoc-plugins
+	@$(MAKE) .protoc-gen
+	@echo "[v] Подготовка к сборке $(BIN_NAME) завершена"
 
 ## build: Собирает проект
+.PHONY: build
 build: 
-	@echo "Сборка проекта ""$(BINARY_NAME)"" ..."
+	@$(MAKE) prebuild
+	@echo "\n[i] Сборка $(BIN_NAME) ..."
 	@mkdir -p ${BUILD_DIR}
-	go build -v -o ${BIN_DIR}/$(BINARY_NAME) ${PACKAGE}
-	@echo "Сборка завершена! Артефакт: ${BIN_DIR}/$(BINARY_NAME)"
+	go build -v -o ${BIN_DIR}/$(BIN_NAME) ${PACKAGE}
+	@echo "[v] $(BIN_NAME) собран успешно!" 
 
 ## clean: Удаляет артефакты сборки
+.PHONY: clean
 clean:
-	@echo "Очистка..."
+	@echo "[i] Очистка..."
 	@go clean
-	@rm -rf $(BIN_DIR)
-	@echo "Очистка завершена"
+	rm -rf $(BIN_DIR)
+	@echo "[v] Очистка завершена"
 
-precommit: lint
-	@echo "Подготовка к коммиту завершена!"
+## precommit: Запуск проверок перед коммитом
+.PHONY: precommit
+precommit: 
+	@$(MAKE) .lint
+	@echo "[v] Подготовка к коммиту завершена!"
 
 ## lint: Запускает линтер (автоматически устанавливает при необходимости)
-lint:
-	@echo "Запуск линтера..."
-	@if [ ! -f "$(LINTER_PATH)" ]; then \
-		echo "Линтер не найден. Установка..."; \
-		$(MAKE) lint-install; \
-		echo "Линтер установлен. Повторный запуск..."; \
+.lint:
+	@if [ ! -f "$(LINTER_BIN_F)" ] \
+	; then \
+		echo "[!] Линтер не найден. Установка..."; \
+		$(MAKE) .lint-install; \
 	fi
-	$(LINTER_PATH) run ./...
+	@echo "[i] Запуск линтера..."
+	$(LINTER_BIN_F) run ./...
 
-## lint-install: Устанавливает golangci-lint в локальную папку bin/lint
-lint-install: 
-	@echo "Установка golangci-lint ($(LINTER_VERSION)) в $(LINTER_DIR)..."
-	@rm -rf $(LINTER_DIR)
-	@mkdir -p $(LINTER_DIR)
+## lint-install: Устанавливает golangci-lint
+.lint-install: 
+	@echo "[i] Установка golangci-lint ($(LINTER_VERSION)) в $(LINTER_DIR_F)..."
+	@rm -rf $(LINTER_DIR_F)
+	@mkdir -p $(LINTER_DIR_F)
 	@tmpdir=$$(mktemp -d); \
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$$tmpdir" $(LINTER_VERSION); \
 	mv "$$tmpdir/$(LINTER_NAME)" $(LINTER_PATH); \
 	rm -rf "$$tmpdir"
-	@echo "Установка завершена: $(LINTER_PATH)"
+	@echo "[v] Установка завершена: $(LINTER_PATH)"
 
-	
+
+
+## prep-protoc-plugins: Устанавливает плагины для protoc
+.prep-protoc-plugins:
+	@if [ ! -f "$(LINTER_PATH)" ]; then \
+		mkdir -p $(PROTOC_PLUGINS_DIR_F); \
+	fi
+
+	GOBIN=$(PROTOC_PLUGINS_DIR_F) go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	GOBIN=$(PROTOC_PLUGINS_DIR_F) go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	GOBIN=$(PROTOC_PLUGINS_DIR_F) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+	GOBIN=$(PROTOC_PLUGINS_DIR_F) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+	@echo "[v] Плагины для protoc готовы"
+
+## protoc-gen: Генерирует .go модули из .proto файлов 
+.protoc-gen:
+	@echo "[i] Генерация .go модулей из схем данных protobuf ..."
+	@if [ ! -d "pkg" ] \
+	; then \
+		mkdir -p pkg \
+	; fi
+	protoc \
+	-I . \
+	-I ./../3rd-party/proto/googleapis \
+	--plugin=protoc-gen-go=$(PROTOC_PLUGINS_DIR_F)/protoc-gen-go \
+	--go_out ./pkg \
+	--go_opt paths=source_relative \
+	--plugin=protoc-gen-go-grpc=$(PROTOC_PLUGINS_DIR_F)/protoc-gen-go-grpc \
+	--go-grpc_out ./pkg \
+	--go-grpc_opt paths=source_relative \
+	--plugin=protoc-gen-grpc-gateway=$(PROTOC_PLUGINS_DIR_F)/protoc-gen-grpc-gateway \
+	--grpc-gateway_out ./pkg \
+	--grpc-gateway_opt generate_unbound_methods=true \
+	--grpc-gateway_opt paths=source_relative \
+	api/v1/loms_service.proto
+	@echo "[v] Генерация завершена"
+
+clr:
+	rm -rf pkg

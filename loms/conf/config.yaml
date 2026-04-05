@@ -1,4 +1,3 @@
-http:
-  addr: ":8080"
-log:
-  level: 0
+srv:
+  http: ":8080"
+  grpc: ":18080"

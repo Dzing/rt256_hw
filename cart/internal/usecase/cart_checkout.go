@@ -8,6 +8,10 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 		return nil, err
 	}
 
+	if len(cart.Items) == 0 {
+		return nil, &CartIsEmptyError{User: TUserId(userId)}
+	}
+
 	var orderContent OrderContentDTO
 
 	items := make([]*OrderContentItemDTO, 0)
@@ -18,6 +22,10 @@ func (s *CartService) CartCheckout(userId uint64) (*entity.Order, error) {
 
 	orderCreated, err := s.loms.OrderCreate(userId, &orderContent)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := s.repo.Clear(userId); err != nil {
 		return nil, err
 	}
 

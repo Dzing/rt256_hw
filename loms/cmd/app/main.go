@@ -1,24 +1,32 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 
-	"route/loms/internal/config"
-	httpcontroller "route/loms/internal/controller/http"
+	config "route/loms/internal/config"
+	grpccontroller "route/loms/internal/controller/grpc"
+
 	ordersrepo "route/loms/internal/repository/orders/inmemory"
 	stockrepo "route/loms/internal/repository/stock/inmemory"
-	"route/loms/internal/usecase"
+	usecase "route/loms/internal/usecase"
+
+	pb_loms "route/loms/pkg/api/v1"
+
+	pb_runtime "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	grpc "google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	reflection "google.golang.org/grpc/reflection"
 )
 
 func run(
 	cfg *config.Config,
 ) error {
-	//logger := nil
-
 	// Репозитории.
 	ordersRepo := ordersrepo.NewOrdersRepoInmemory()
 	stockRepo := stockrepo.NewStockRepoInmemory()
@@ -26,23 +34,46 @@ func run(
 	// Бизнес-логика.
 	lomsService := usecase.NewOrdersService(ordersRepo, stockRepo)
 
-	// контроллеры
-	httpCtrl := httpcontroller.NewLomsHttpController(lomsService)
+	// Контроллеры.
+	grpcCtrl := grpccontroller.NewLomsGrpcController(lomsService)
 
-	// http сервер
+	// gRPC сервер.
+	lisGrpc, err := net.Listen("tcp", cfg.Srv.GrpcAddr)
+	if err != nil {
+		log.Fatalf("failed to listen : %v", err)
+	}
+	grpcServer := grpc.NewServer()
+	reflection.Register(grpcServer)
+	pb_loms.RegisterLomsServer(grpcServer, grpcCtrl)
 
-	mux := http.NewServeMux()
-	httpCtrl.SetupRoutes(mux)
+	fmt.Printf("gRPC server is listening on %s\n", lisGrpc.Addr())
+	go func() {
+		if err = grpcServer.Serve(lisGrpc); err != nil {
+			log.Fatalf("failed to start gRPC server: %v", err)
+		}
+	}()
 
-	if err := http.ListenAndServe(cfg.Http.Addr, mux); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
-		return err
+	// HTTP gateway сервер.
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	pb_mux := pb_runtime.NewServeMux()
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	if err = pb_loms.RegisterLomsHandlerFromEndpoint(ctx, pb_mux, cfg.Srv.GrpcAddr, opts); err != nil {
+		log.Fatalf("failed to register endpoint handler: %v", err)
 	}
 
-	fmt.Printf("Server is running on %s\n", cfg.Http.Addr)
+	lisHttp, err := net.Listen("tcp", cfg.Srv.HttpAddr)
+	if err != nil {
+		log.Fatalf("failed to listen : %v", err)
+	}
+	fmt.Printf("HTTP server is listening on %s\n", lisHttp.Addr())
+	if err := http.Serve(lisHttp, pb_mux); err != nil {
+		log.Fatalf("failed to start HTTP server: %v", err)
+	}
 
 	return nil
-
 }
 
 func main() {

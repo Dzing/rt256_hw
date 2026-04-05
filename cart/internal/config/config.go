@@ -9,15 +9,16 @@ import (
 
 type (
 	Config struct {
-		Http struct {
-			Addr string `yaml:"addr"`
-		} `yaml:"http"`
+		Srv struct {
+			HttpAddr string `yaml:"http"`
+			GrpcAddr string `yaml:"grpc"`
+		} `yaml:"srv"`
 		Loms struct {
-			Addr string `yaml:"addr"`
+			GrpcAddr string `yaml:"grpc"`
 		} `yaml:"loms"`
 		Prod struct {
-			Addr  string `yaml:"addr"`
-			Token string `yaml:"token"`
+			GrpcAddr string `yaml:"grpc"`
+			Token    string `yaml:"token"`
 		} `yaml:"prod"`
 	}
 )

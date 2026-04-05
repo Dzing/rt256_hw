@@ -9,9 +9,10 @@ import (
 
 type (
 	Config struct {
-		Http struct {
-			Addr string `yaml:"addr"`
-		} `yaml:"http"`
+		Srv struct {
+			HttpAddr string `yaml:"http"`
+			GrpcAddr string `yaml:"grpc"`
+		} `yaml:"srv"`
 	}
 )
 
