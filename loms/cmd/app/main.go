@@ -12,7 +12,6 @@ import (
 	config "route/loms/internal/config"
 	grpccontroller "route/loms/internal/controller/grpc"
 
-	//httpcontroller "route/loms/internal/controller/http"
 	ordersrepo "route/loms/internal/repository/orders/inmemory"
 	stockrepo "route/loms/internal/repository/stock/inmemory"
 	usecase "route/loms/internal/usecase"
@@ -36,11 +35,10 @@ func run(
 	lomsService := usecase.NewOrdersService(ordersRepo, stockRepo)
 
 	// Контроллеры.
-	//httpCtrl := httpcontroller.NewLomsHttpController(lomsService)
 	grpcCtrl := grpccontroller.NewLomsGrpcController(lomsService)
 
 	// gRPC сервер.
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Grpc.Port))
+	lisGrpc, err := net.Listen("tcp", cfg.Srv.GrpcAddr)
 	if err != nil {
 		log.Fatalf("failed to listen : %v", err)
 	}
@@ -48,10 +46,10 @@ func run(
 	reflection.Register(grpcServer)
 	pb_loms.RegisterLomsServer(grpcServer, grpcCtrl)
 
-	fmt.Printf("GRPC server is listening on %s\n", lis.Addr())
+	fmt.Printf("gRPC server is listening on %s\n", lisGrpc.Addr())
 	go func() {
-		if err = grpcServer.Serve(lis); err != nil {
-			log.Fatalf("failed to serve: %v", err)
+		if err = grpcServer.Serve(lisGrpc); err != nil {
+			log.Fatalf("failed to start gRPC server: %v", err)
 		}
 	}()
 
@@ -62,13 +60,17 @@ func run(
 
 	pb_mux := pb_runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	if err = pb_loms.RegisterLomsHandlerFromEndpoint(ctx, pb_mux, fmt.Sprintf("localhost:%d", cfg.Grpc.Port), opts); err != nil {
+	if err = pb_loms.RegisterLomsHandlerFromEndpoint(ctx, pb_mux, cfg.Srv.GrpcAddr, opts); err != nil {
 		log.Fatalf("failed to register endpoint handler: %v", err)
 	}
 
-	fmt.Printf("Http server is listening on %s\n", cfg.Http.Addr)
-	if err := http.ListenAndServe(cfg.Http.Addr, pb_mux); err != nil {
-		log.Fatalf("Failed to start http server: %v", err)
+	lisHttp, err := net.Listen("tcp", cfg.Srv.HttpAddr)
+	if err != nil {
+		log.Fatalf("failed to listen : %v", err)
+	}
+	fmt.Printf("HTTP server is listening on %s\n", lisHttp.Addr())
+	if err := http.Serve(lisHttp, pb_mux); err != nil {
+		log.Fatalf("failed to start HTTP server: %v", err)
 	}
 
 	return nil

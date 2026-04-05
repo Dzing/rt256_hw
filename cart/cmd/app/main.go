@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"os"
 
-	lomsgrpcclient "route/cart/internal/client/loms/grpc"
+	config "route/cart/internal/config"
 
-	prodhttpclient "route/cart/internal/client/productservice/http"
-	"route/cart/internal/config"
+	lomsclient "route/cart/internal/client/loms/grpc"
+	productclient "route/cart/internal/client/productservice/grpc"
 
 	grpccontroller "route/cart/internal/controller/grpc"
 	cartrepo "route/cart/internal/repository/cart/inmemory"
@@ -31,11 +31,14 @@ func run(cfg *config.Config) error {
 	cartRepo := cartrepo.NewCartRepoInmemory()
 
 	// Клиенты.
-	lomsGrpcClient, err := lomsgrpcclient.NewLomsHttpClient(cfg.Loms.GrpcAddr)
+	lomsGrpcClient, err := lomsclient.NewLomsHttpClient(cfg.Loms.GrpcAddr)
 	if err != nil {
 		log.Fatalf("failed to create loms gRPC client: %v", err)
 	}
-	prodClient := prodhttpclient.NewProductServiceHttpClient(cfg.Prod.HttpAddr, cfg.Prod.Token)
+	prodClient, err := productclient.NewProductServiceClient(cfg.Prod.GrpcAddr, cfg.Prod.Token)
+	if err != nil {
+		log.Fatalf("failed to create ProductService gRPC client: %v", err)
+	}
 
 	// Бизнес-логика.
 	cartService := uc.NewCartService(cartRepo, lomsGrpcClient, prodClient)
@@ -44,7 +47,7 @@ func run(cfg *config.Config) error {
 	grpcCtrl := grpccontroller.NewCartGrpcController(cartService)
 
 	// gRPC сервер.
-	lis, err := net.Listen("tcp", cfg.Srv.GrpcAddr)
+	lisGrpc, err := net.Listen("tcp", cfg.Srv.GrpcAddr)
 	if err != nil {
 		log.Fatalf("failed to listen : %v", err)
 	}
@@ -52,10 +55,10 @@ func run(cfg *config.Config) error {
 	reflection.Register(grpcServer)
 	pb_cart.RegisterCartServer(grpcServer, grpcCtrl)
 
-	fmt.Printf("GRPC server is listening on %s\n", lis.Addr())
+	fmt.Printf("gRPC server is listening on %s\n", lisGrpc.Addr())
 	go func() {
-		if err = grpcServer.Serve(lis); err != nil {
-			log.Fatalf("failed to serve: %v", err)
+		if err = grpcServer.Serve(lisGrpc); err != nil {
+			log.Fatalf("failed to start gRPC server: %v", err)
 		}
 	}()
 
@@ -70,9 +73,13 @@ func run(cfg *config.Config) error {
 		log.Fatalf("failed to register endpoint handler: %v", err)
 	}
 
-	fmt.Printf("Http server is listening on %s\n", cfg.Srv.HttpAddr)
-	if err := http.ListenAndServe(cfg.Srv.HttpAddr, pb_mux); err != nil {
-		log.Fatalf("Failed to start http server: %v", err)
+	lisHttp, err := net.Listen("tcp", cfg.Srv.HttpAddr)
+	if err != nil {
+		log.Fatalf("failed to listen : %v", err)
+	}
+	fmt.Printf("HTTP server is listening on %s\n", lisHttp.Addr())
+	if err := http.Serve(lisHttp, pb_mux); err != nil {
+		log.Fatalf("failed to start http server: %v", err)
 	}
 
 	return nil

@@ -14,11 +14,10 @@ type (
 			GrpcAddr string `yaml:"grpc"`
 		} `yaml:"srv"`
 		Loms struct {
-			HttpAddr string `yaml:"http"`
 			GrpcAddr string `yaml:"grpc"`
 		} `yaml:"loms"`
 		Prod struct {
-			HttpAddr string `yaml:"http"`
+			GrpcAddr string `yaml:"grpc"`
 			Token    string `yaml:"token"`
 		} `yaml:"prod"`
 	}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package route256.product;
+option go_package = "route/cart/pkg/api/prod;pb_prod";
+
+//
+service ProductService {
+    //
+    rpc GetProduct(GetProductRequest) returns (GetProductResponse){}
+}
+//
+message GetProductRequest {
+    string token  = 1;
+    int64 sku = 2;
+}
+//
+message GetProductResponse {
+    string name = 1;
+    int64 price = 2;
+}

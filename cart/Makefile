@@ -103,6 +103,18 @@ precommit:
 	--grpc-gateway_opt generate_unbound_methods=true \
 	--grpc-gateway_opt paths=source_relative \
 	api/v1/cart_service.proto
+
+	protoc \
+	-I . \
+	-I ./../3rd-party/proto/googleapis \
+	--plugin=protoc-gen-go=$(PROTOC_PLUGINS_DIR_F)/protoc-gen-go \
+	--go_out ./pkg \
+	--go_opt paths=source_relative \
+	--plugin=protoc-gen-go-grpc=$(PROTOC_PLUGINS_DIR_F)/protoc-gen-go-grpc \
+	--go-grpc_out ./pkg \
+	--go-grpc_opt paths=source_relative \
+	api/prod/prod_service.proto
+
 	@echo "[v] Генерация завершена"
 
 clr:

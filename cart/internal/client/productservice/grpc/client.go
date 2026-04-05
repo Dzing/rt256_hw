@@ -2,10 +2,9 @@ package clientgrpc
 
 import (
 	"log/slog"
-	"time"
-
 	"route/cart/internal/usecase"
-	pb_loms "route/loms/pkg/api/v1"
+	pb_prod "route/cart/pkg/api/prod"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -26,12 +25,14 @@ var retryPolicy = `{
 }`
 
 type (
-	LomsGrpcClient struct {
-		pb_c pb_loms.LomsClient
+	ProductServiceGrpcClient struct {
+		addr  string
+		token string
+		pb_c  pb_prod.ProductServiceClient
 	}
 )
 
-func NewLomsHttpClient(addr string) (*LomsGrpcClient, error) {
+func NewProductServiceClient(addr string, token string) (*ProductServiceGrpcClient, error) {
 	conn, err := grpc.NewClient(
 		addr,
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
@@ -47,12 +48,14 @@ func NewLomsHttpClient(addr string) (*LomsGrpcClient, error) {
 		slog.Error("falied to connect with gRPC server", "err", err.Error(), "addr", addr)
 	}
 
-	client := LomsGrpcClient{
-		pb_c: pb_loms.NewLomsClient(conn),
+	client := ProductServiceGrpcClient{
+		addr:  addr,
+		token: token,
+		pb_c:  pb_prod.NewProductServiceClient(conn),
 	}
 
 	return &client, nil
 }
 
 // Проверка соответствия интерфейсу.
-var _ usecase.LomsClient = (*LomsGrpcClient)(nil)
+var _ usecase.ProductServiceClient = (*ProductServiceGrpcClient)(nil)
